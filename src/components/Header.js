@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+import { Link } from 'react-router-dom'
 
 import color from '../styles/color-variables';
 
@@ -8,30 +9,34 @@ export default class Header extends React.Component {
   //   super();
   // }
 
+  
+
   render() {
     const Wrapper = this.style();
 
     return (
       <Wrapper>
-        <h1>Battle of Gods</h1>
+        <Link to="/cms">
+          <h1>Battle of Gods</h1>
+        </Link>
       </Wrapper>
     );
   }
 
   style() {
-    const headerHeight = 50;
+    const headerHeight = 35;
     return styled.header`
       width: 100%;
       height: ${headerHeight}px;
       line-height: ${headerHeight}px;
       background: ${color.blue};
-      text-align: center;
-      color: white;
       text-transform: uppercase;
       letter-spacing: 2px;
 
       h1 {
-        font-size: 1.2em;
+        font-size: 1em;
+        color: white;
+        padding-left: ${headerHeight / 5}px;
       }
     `;
   }

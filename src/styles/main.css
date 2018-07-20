@@ -16,7 +16,12 @@ body {
 }
 
 #root {
+  
+}
 
+a {
+  text-decoration: none;
+  color: black;
 }
 
 fieldset {

@@ -4,7 +4,7 @@ const mongoose = require('mongoose');
 const path = require('path');
 const bodyParser = require('body-parser');
 const dotenv = require('dotenv');
-const shortid = require('shortid');
+const cors = require('cors');
 
 const { Team, Character, SpecialCard } = require('./models');
 const apiRoutes = require('./apiRoutes');
@@ -17,6 +17,7 @@ dotenv.load();
 mongoose.connection.on('open', onDBConnect);
 mongoose.connect(MONGO_URI, { useNewUrlParser: true });
 
+app.use(cors());
 app.use(bodyParser.json());
 app.use(express.static(path.resolve(__dirname, 'build')));
 app.use('/api', apiRoutes);

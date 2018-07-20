@@ -1,23 +1,15 @@
-import React, { Component } from 'react';
+import React from 'react';
 import {
   BrowserRouter as Router,
   Route,
   Switch,
 } from 'react-router-dom'
+
+import Dashboard from './Dashboard';
 import Header from './Header';
 import NotFound from './NotFound';
 import Login from './Login';
-
-class Main extends Component {
-  render() {
-    // const secretCode = process.env.REACT_APP_SECRET_CODE;
-    return (
-      <div>
-        <h1>DASHBOARD!</h1>
-      </div>
-    );
-  }
-}
+import TeamViewer from './TeamViewer';
 
 export default () => (
   <Router>
@@ -25,7 +17,8 @@ export default () => (
       <Header/>
       <Switch>
         <Route exact path="/signin" component={Login} />
-        <Route exact path="/cms" component={Main} />
+        <Route exact path="/cms" component={Dashboard} />
+        <Route exact path="/teams" component={TeamViewer} />
         <Route component={NotFound} />
       </Switch>
     </div>
