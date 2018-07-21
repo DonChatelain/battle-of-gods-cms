@@ -17,7 +17,7 @@ router.get('/:key', (req, res) => {
   const query = { key: req.params.key };
   Team.findOne(query).then(team => res.json(team));
 });
-// TODO: aggregated stats option (calling Character collection, etc.)
+// TODO: aggregated stats option (calling Character and SpecialCard collections, etc.)
 
 // PATCH
 router.patch('/:key', (req, res) => {

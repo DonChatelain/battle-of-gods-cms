@@ -10,6 +10,7 @@ import Header from './Header';
 import NotFound from './NotFound';
 import Login from './Login';
 import TeamViewer from './TeamViewer';
+import CharacterViewer from './CharacterViewer';
 
 export default () => (
   <Router>
@@ -19,6 +20,7 @@ export default () => (
         <Route exact path="/signin" component={Login} />
         <Route exact path="/cms" component={Dashboard} />
         <Route exact path="/teams" component={TeamViewer} />
+        <Route exact path="/characters" component={CharacterViewer} />
         <Route component={NotFound} />
       </Switch>
     </div>

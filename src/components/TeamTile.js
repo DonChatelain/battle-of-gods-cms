@@ -96,7 +96,7 @@ export default class TeamTile extends React.Component {
             font-size: 0.8em;
             overflow: hidden;
             border: 0;
-            border-bottom: 2px solid #428bca;
+            border-bottom: 2px solid ${color.blue};
             font-weight: bold;
             -webkit-letter-spacing: .15em;
             -moz-letter-spacing: .15em;

@@ -10,10 +10,8 @@ const { Team, Character, SpecialCard } = require('./models');
 const apiRoutes = require('./routes');
 
 const MONGO_URI = process.env.BOG_DB_URI || '';
-const PORT = 80; // update in client/config.js
+const PORT = process.env.NODE_ENV === "production" ? 80 : 6660;
 const app = express();
-
-console.log(`==== ==  SERVER NOW_URL: ${process.env.NOW_URL}  == ==== `);
 
 dotenv.load();
 mongoose.connection.on('open', onDBConnect);
