@@ -10,11 +10,6 @@ export default class TeamTile extends React.Component {
   }
 
   onFactionChange(event) {
-    /* TODO: Undo system (create alongside Trash bin system)
-      This will be cool - setup subtle animation to fire on Header indicating DB save and new item in Undo stack
-      Will hook into network methods on Service class (also TODO)
-      ? Click on hamburger menu in Header to show list with Undo button
-    */
     const faction = event.target.value
     this.props.patchData(this.state.key, { faction });
     this.setState({ faction });

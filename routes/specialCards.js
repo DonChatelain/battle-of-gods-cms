@@ -30,7 +30,6 @@ router.post('/', (req, res) => {
 
 // DELETE
 router.delete('/:id', (req, res) => {
-  // TODO: Set up Trash Bin collection / transfer system
   SpecialCard.remove({ _id: req.params.id })
     .then(card => res.json(card))
     .catch(error => res.json({ error }));

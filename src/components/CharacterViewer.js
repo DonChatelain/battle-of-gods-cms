@@ -5,8 +5,6 @@ import styled from 'styled-components';
 import config from '../config';
 import CharacterTile from './CharacterTile';
 
-// TODO: consolidate this and teamViewer to just "Viewer" or something
-
 export default class CharacterViewer extends React.Component {
   constructor() {
     super();

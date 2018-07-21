@@ -35,9 +35,6 @@ export default class CharacterTile extends React.Component {
   }
 
   render() {
-
-    // TODO: display team (name + faction symbol)
-    // TODO: display aggregate stats per character
     const char = this.state;
     const Wrapper = this.style();
     return (
@@ -54,7 +51,6 @@ export default class CharacterTile extends React.Component {
           <div>
             <label>Image</label>
             <input type="file" /> 
-            {/* TODO: file upload USE LABEL and hide this shit */}
           </div>
         </div>
         <div>
@@ -144,7 +140,6 @@ export default class CharacterTile extends React.Component {
         border-bottom: 2px solid ${color.blue};
         box-shadow: 1px 2px 7px 0px rgba(0,0,0,0.3);
       }
-      /* TODO: MAJOR styling refactor / sensibility */
     `;
   }
 }
