@@ -29,7 +29,7 @@
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject",
-    "deploy": "now -e REACT_APP_SECRET_CODE=secretcode --public"
+    "deploy": "now -e BOG_DB_URI=@bog_db_url --public"
   },
   "repository": {
     "type": "git",

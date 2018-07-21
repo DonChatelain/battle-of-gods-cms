@@ -8,12 +8,16 @@ router.get('/', (req, res) => {
   const query = {};
   req.query.deckClass ? query.deckClass = req.query.deckClass: null;
   req.query.faction ? query.faction = req.query.faction : null;
-  Team.find(query).then(teams => res.json(teams));
+  Team
+    .find(query)
+    .sort({ key: 1 })
+    .then(teams => res.json(teams));
 });
 router.get('/:key', (req, res) => {
   const query = { key: req.params.key };
   Team.findOne(query).then(team => res.json(team));
 });
+// TODO: aggregated stats option (calling Character collection, etc.)
 
 // PATCH
 router.patch('/:key', (req, res) => {

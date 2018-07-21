@@ -20,12 +20,19 @@ export default class TeamViewer extends React.Component {
       .catch(err => console.error(err));
   }
 
+  patchData(key, data) {
+    axios
+      .patch(`${config.API_URL}/teams/${key}`, data)
+      .then(res => console.log(res.data))
+      .catch(err => console.error(err));
+  }
+
   render() {
     const Wrapper = this.style();
     return (
       <Wrapper>
         {this.state.teams.map((t, i) => 
-          <TeamTile team={t} key={i} />
+          <TeamTile team={t} key={i} patchData={this.patchData.bind(this)} />
         )}
       </Wrapper>
     );

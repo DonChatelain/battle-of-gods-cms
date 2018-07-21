@@ -1,3 +1,4 @@
-export default {
-  API_URL: 'http://localhost:6660/api',
+
+export default { 
+  API_URL: '/api'
 }

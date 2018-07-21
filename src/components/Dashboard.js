@@ -48,7 +48,7 @@ export default class Header extends React.Component {
   style() {
     return styled.header`
       background: black;
-      
+
       div {
         width: 100%;
         height: calc(25vh - 12px);
@@ -56,7 +56,7 @@ export default class Header extends React.Component {
         display: flex;
         align-items: center;
         justify-content: center;
-        border: 1px solid #eaeaea;
+        border-bottom: 1px solid #eaeaea;
         box-sizing: border-box;
         cursor: pointer;
         transition: opacity 300ms ease;

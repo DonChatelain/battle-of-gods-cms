@@ -7,11 +7,13 @@ const dotenv = require('dotenv');
 const cors = require('cors');
 
 const { Team, Character, SpecialCard } = require('./models');
-const apiRoutes = require('./apiRoutes');
+const apiRoutes = require('./routes');
 
 const MONGO_URI = process.env.BOG_DB_URI || '';
-const PORT = 6660; // update in client/config.js
+const PORT = 80; // update in client/config.js
 const app = express();
+
+console.log(`==== ==  SERVER NOW_URL: ${process.env.NOW_URL}  == ==== `);
 
 dotenv.load();
 mongoose.connection.on('open', onDBConnect);
