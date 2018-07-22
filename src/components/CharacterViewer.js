@@ -3,7 +3,7 @@ import axios from 'axios';
 import styled from 'styled-components';
 
 import config from '../config';
-import CharacterTile from './CharacterTile';
+import Tile from './Tile';
 
 export default class CharacterViewer extends React.Component {
   constructor() {
@@ -20,6 +20,16 @@ export default class CharacterViewer extends React.Component {
       .catch(err => console.error(err));
   }
 
+  onBlur(value, charIndex, field) {
+    const newState = {};
+    newState[field] = value;
+    const char = this.state.characters.find(c => c.index === charIndex);
+    if (char[field] === newState[field]) return;
+    char[field] = newState[field];
+    this.patchData(charIndex, newState);
+    this.forceUpdate();
+  }
+
   patchData(index, data) {
     axios
       .patch(`${config.API_URL}/characters/${index}`, data)
@@ -31,16 +41,52 @@ export default class CharacterViewer extends React.Component {
     const Wrapper = this.style();
     return (
       <Wrapper>
-        {this.state.characters.map((c, i) => 
-          <CharacterTile character={c} key={i} patchData={this.patchData.bind(this)} />
-        )}
+        {this.state.characters.map((char, i) => {
+          return (
+          <Tile data={char} key={i}>
+            <h3 className="row full">{char.name}</h3>
+            <div className="row half">
+              <div>
+                <label>Health</label>
+                <input type="number"
+                      defaultValue={char.health}
+                      onBlur={(event) => this.onBlur(event.target.value, i, 'health')}
+                />
+              </div>
+              <div>
+                <label>Image</label>
+                <input type="file" /> 
+              </div>
+            </div>
+            <div className="row full">
+              <label>Description</label>
+              <textarea defaultValue={char.description}
+                        onBlur={(event) => this.onBlur(event.target.value, i, 'description')}>
+              </textarea>
+            </div>
+          </Tile>
+          )
+        })}
       </Wrapper>
     );
   }
 
   style() {
     return styled.main`
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-evenly;
+      padding: 10px;
 
+      > section {
+        width: 100%;
+      }
+
+      @media only screen and (min-width : 768px) {
+        > section {
+          width: 40%;
+        }
+      }
     `;
   }
 }
