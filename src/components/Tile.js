@@ -33,6 +33,25 @@ export default class Tile extends React.Component {
         display: flex;
         flex-wrap: nowrap;
         justify-content: space-between;
+        
+        a {
+          border: 2px solid ${color.blue};
+          cursor: pointer;
+          transition: opacity 200ms ease;
+          opacity: 0.75;
+          color: ${color.blue};
+          font-weight: bold;
+          width: calc(50% - 10px * 2) !important;
+          border-radius: 5px;
+          font-size: 0.9em;
+          text-align: center;
+          box-sizing: border-box;
+          padding: 5px;
+
+          &:hover {
+            opacity: 1;
+          }
+        }
         &.full {
           display: block;
           > * {
@@ -48,9 +67,19 @@ export default class Tile extends React.Component {
         &.half {
           * {
             max-width: 100%;
+            min-width: 50%;
           }
           >* {
             width: calc(50% - ${sectionPadding} / 2);
+          }
+        }
+        &.third {
+          * {
+            /* max-width: 100%; */
+            /* min-width: 50%; */
+          }
+          > * {
+            width: calc(33.33% - ${sectionPadding} / 2);
           }
         }
       }
@@ -62,15 +91,12 @@ export default class Tile extends React.Component {
         width: 100%;
       }
 
-      input {
+      select, input, textarea {
         display: block;
         -webkit-appearance: none;
         -moz-appearance: none;
         height: 30px;
         font-size: 0.8em;
-        overflow: hidden;
-        border: 0;
-        border-bottom: 2px solid #428bca;
         font-weight: bold;
         -webkit-letter-spacing: .15em;
         -moz-letter-spacing: .15em;
@@ -78,17 +104,32 @@ export default class Tile extends React.Component {
         letter-spacing: .15em;
         box-shadow: 1px 2px 7px 0px rgba(0,0,0,0.3);
         text-indent: 10px;
+        border: none;
+        border-bottom: solid 2px ${color.blue};
         border-bottom-left-radius: 0% !important;
         border-bottom-right-radius: 0% !important;
         border-radius: 0% !important;
+        overflow: hidden;
+        box-sizing: border-box;
         &:focus, &:active {
           outline: 0;
           border-bottom-color: ${color.red};
         }
+      }
+
+      input {
 
         &[type=file] {
           line-height: 2.5;
           text-indent: 0;
+        }
+
+        &[type=checkbox]:checked {
+          background: ${color.blue};
+          border: 2px solid ${color.blue};
+        }
+        &:disabled {
+          opacity: 0.2;
         }
       }
 
@@ -96,43 +137,13 @@ export default class Tile extends React.Component {
         min-width: 100%;
         max-width: 100%;
         min-height: 75px;
-        height: 30px;
-        -webkit-appearance: none;
-        -moz-appearance: none;
-        border: 0;
-        border-bottom: 2px solid ${color.blue};
-        box-shadow: 1px 2px 7px 0px rgba(0,0,0,0.3);
-        &:focus, &:active {
-          outline: 0;
-          border-bottom-color: ${color.red};
-        }
+        font-weight: normal;
+        padding:  10px 10px;
+        text-indent: 0;
       }
 
       select {
-        -webkit-appearance: none;
-        -moz-appearance: none;
-        padding: 10px;
-        /* min-width: 50%;
-        max-width: calc(100% - 10px); */
-        /* margin-left: 15px; */
-        font-size: 0.8em;
-        overflow: hidden;
-        border: 0;
-        border-bottom: 2px solid ${color.blue};
-        font-weight: bold;
-        -webkit-letter-spacing: .15em;
-        -moz-letter-spacing: .15em;
-        -ms-letter-spacing: .15em;
-        letter-spacing: .15em;
-        box-shadow: 1px 2px 7px 0px rgba(0,0,0,0.3);
-        border-bottom-left-radius: 0% !important;
-        border-bottom-right-radius: 0% !important;
-        border-radius: 0% !important;
-        display: block;
-        &:focus, &:active {
-          outline: 0;
-          border-bottom-color: ${color.red};
-        }
+      }
     `;
   }
 }

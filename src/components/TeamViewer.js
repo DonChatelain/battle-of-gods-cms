@@ -4,19 +4,33 @@ import styled from 'styled-components';
 
 import config from '../config';
 import Tile from './Tile';
+import heartPng from '../static/heart.png';
+import attackPng from '../static/attack.png';
+import defensePng from '../static/defense.png';
 
 export default class TeamViewer extends React.Component {
   constructor() {
     super();
     this.state = {
       teams: [],
+      stats: {},
     };
   }
 
   componentDidMount() {
     axios
       .get(config.API_URL + '/teams')
-      .then(res => this.setState({ teams: res.data }))
+      .then(res => this.setState({ teams: res.data }, this.fetchStats))
+      .catch(err => console.error(err));
+  }
+
+  fetchStats() {
+    axios 
+      .get(config.API_URL + '/teams?statsonly=true')
+      .then(res => {
+        console.log(res.data);
+        this.setState({ stats: res.data });
+      })
       .catch(err => console.error(err));
   }
 
@@ -30,24 +44,33 @@ export default class TeamViewer extends React.Component {
   onChange(value, charIndex, field) {
     const newState = {};
     newState[field] = value;
-    if (this.state.characters[charIndex][field] === newState[field]) return;
-    // eslint-disable-next-line react/no-direct-mutation-state
-    this.state.characters[charIndex][field] = newState[field];
-    this.patchData(charIndex, newState);
-    this.forceUpdate();
+    const team = this.state.teams[charIndex];
+    if (team[field] === newState[field]) return;
+    team[field] = newState[field];
+    this.patchData(team.key, newState);
   }
 
   render() {
+    const getTeamByKey = (teamKey) => {
+      const team = this.state.stats[teamKey]
+      return team || {};
+    };
+
     const Wrapper = this.style();
     return (
       <Wrapper>
         {this.state.teams.map((team, i) => 
           <Tile data={team} key={i}>
             <h3 className="row full">{team.name}</h3>
+            <div className="row third stats">
+              <span className="health">{getTeamByKey(team.key).health}</span>
+              <span className="attack">{getTeamByKey(team.key).totalAtk}</span>
+              <span className="defense">{getTeamByKey(team.key).totalDef}</span>
+            </div>
             <div className="row half">
               <div>
                 <label>Faction</label>
-                <select value={team.faction} 
+                <select defaultValue={team.faction} 
                         onChange={(event) => this.onChange(event.target.value, i, 'faction')}>
                   <option value="Egyptian">Egyptian</option>
                   <option value="Norse">Norse</option>
@@ -57,7 +80,7 @@ export default class TeamViewer extends React.Component {
               </div>
               <div>
                 <label>Class</label>
-                <select value={team.deckClass}
+                <select defaultValue={team.deckClass}
                         onChange={(event) => this.onChange(event.target.value, i, 'deckClass')}>
                   <option value="BLUE">BLUE</option>
                   <option value="GREEN">GREEN</option>
@@ -80,6 +103,41 @@ export default class TeamViewer extends React.Component {
 
       > section {
         width: 100%;
+      }
+
+      .stats {
+        height: 30px;
+
+        span {
+          position: relative;
+        }
+
+        span::before {
+          content: '';
+          width: 50px;
+          height: 50px;
+          position: relative;
+          content: '';
+          width: 35px;
+          height: 25px;
+          position: relative;
+          top: 0;
+          left: 0;
+          background-size: 20px;
+          display: inline-block;
+          background-repeat: no-repeat;
+          vertical-align: middle;
+        }
+
+        .health::before {
+          background-image: url(${heartPng});
+        }
+        .attack::before {
+          background-image: url(${attackPng});
+        }
+        .defense::before {
+          background-image: url(${defensePng});
+        }
       }
 
       @media only screen and (min-width : 768px) {

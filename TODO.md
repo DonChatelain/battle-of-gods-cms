@@ -15,4 +15,21 @@ Will hook into network methods on Service class (also TODO)
 - Special Card View: text, numbers, Character.find(), textarea, indx by "id" field. 
 - Basic Card View: RED, BLUE, GREEN stats: atk def qt Numbers
 - Character view: display minorCount
+- CSS Loader while data fetching
+- BIGGY: For accurate stat aggregation, figure out how to account for full block counters, and instant damage....???
+- Link pages i.e. each character tile has link to its cards
+
 ------
+
+### FUCK UP! TODO: 
+Following cards value fixing:
+- Soul Collector
+- Scent of Death
+- Eyes of Ah Puch
+- Sacrifice
+- Flay
+- Judgement of Scales
+- Embalm
+- Swift Victory
+- Plague
+- Blot Out the Sun

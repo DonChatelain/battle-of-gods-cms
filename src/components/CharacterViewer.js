@@ -1,6 +1,7 @@
 import React from 'react';
 import axios from 'axios';
 import styled from 'styled-components';
+import { Link } from 'react-router-dom';
 
 import config from '../config';
 import Tile from './Tile';
@@ -27,7 +28,6 @@ export default class CharacterViewer extends React.Component {
     if (char[field] === newState[field]) return;
     char[field] = newState[field];
     this.patchData(charIndex, newState);
-    this.forceUpdate();
   }
 
   patchData(index, data) {
@@ -45,6 +45,11 @@ export default class CharacterViewer extends React.Component {
           return (
           <Tile data={char} key={i}>
             <h3 className="row full">{char.name}</h3>
+            <div className="row full">
+              <Link to={`/specialcards?owner=${char.name}`}>
+                View Special Cards
+              </Link>
+            </div>
             <div className="row half">
               <div>
                 <label>Health</label>
