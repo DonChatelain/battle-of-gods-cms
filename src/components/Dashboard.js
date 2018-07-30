@@ -46,7 +46,7 @@ export default class Header extends React.Component {
   }
 
   style() {
-    return styled.header`
+    return styled.main`
       background: black;
 
       div {

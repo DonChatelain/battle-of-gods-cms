@@ -11,12 +11,20 @@ export default class CharacterViewer extends React.Component {
     super();
     this.state = {
       characters: [],
+      editing: null,
     };
   }
 
   componentDidMount() {
+    const url = new URL(window.location.href);
+    const queries = [
+      url.searchParams.get('name') ? 'name=' + url.searchParams.get('name') : '',
+      url.searchParams.get('faction') ? 'faction=' + url.searchParams.get('faction') : '',
+      url.searchParams.get('team') ? 'team=' + url.searchParams.get('team') : '',
+      url.searchParams.get('health') ? 'health=' + url.searchParams.get('health') : ''
+    ];
     axios
-      .get(config.API_URL + '/characters')
+      .get(config.API_URL + '/characters?' + queries.join('&'))
       .then(res => this.setState({ characters: res.data }))
       .catch(err => console.error(err));
   }
@@ -37,19 +45,43 @@ export default class CharacterViewer extends React.Component {
       .catch(err => console.error(err));
   }
 
+  shouldComponentUpdate(nextProps, nextState) {
+    if (JSON.stringify(this.state.characters) !== JSON.stringify(nextState.characters) ||
+        this.state.editing !== nextState.editing) 
+      return true
+    else
+      return false
+  }
+
   render() {
     const Wrapper = this.style();
+    const displayName = (name, index) => {
+      if (this.state.editing === name) {
+        return (
+          <input type="text"
+                 defaultValue={name}
+                 onBlur={(event) => {
+                   this.onBlur(event.target.value, index, 'name');
+                   this.setState({ editing: null });
+                 }} />
+        ) 
+      }
+      return (
+        <h3 className="row full"
+            onClick={() => this.setState({ editing: name })}>
+          {name}
+        </h3>
+      )
+    }
     return (
       <Wrapper>
         {this.state.characters.map((char, i) => {
           return (
           <Tile data={char} key={i}>
-            <h3 className="row full">{char.name}</h3>
-            <div className="row full">
-              <Link to={`/specialcards?owner=${char.name}`}>
-                View Special Cards
-              </Link>
-            </div>
+            <a className="anchor-target" name={char.name}>&nbsp;</a>
+            
+            {displayName(char.name, i)}
+
             <div className="row half">
               <div>
                 <label>Health</label>
@@ -68,6 +100,11 @@ export default class CharacterViewer extends React.Component {
               <textarea defaultValue={char.description}
                         onBlur={(event) => this.onBlur(event.target.value, i, 'description')}>
               </textarea>
+            </div>
+            <div className="row full">
+              <Link to={`/specialcards?owner=${char.name}`}>
+                View Special Cards
+              </Link>
             </div>
           </Tile>
           )

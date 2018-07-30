@@ -9,8 +9,6 @@ export default class Header extends React.Component {
   //   super();
   // }
 
-  
-
   render() {
     const Wrapper = this.style();
 
@@ -26,6 +24,9 @@ export default class Header extends React.Component {
   style() {
     const headerHeight = 35;
     return styled.header`
+      z-index: 100;
+      position: fixed;
+      top: 0;
       width: 100%;
       height: ${headerHeight}px;
       line-height: ${headerHeight}px;

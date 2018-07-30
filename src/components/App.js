@@ -3,7 +3,8 @@ import {
   BrowserRouter as Router,
   Route,
   Switch,
-} from 'react-router-dom'
+} from 'react-router-dom';
+import styled from 'styled-components';
 
 import Dashboard from './Dashboard';
 import Header from './Header';
@@ -17,6 +18,7 @@ export default () => (
   <Router>
     <div>
       <Header/>
+      <Filler />
       <Switch>
         <Route exact path="/signin" component={Login} />
         <Route exact path="/cms" component={Dashboard} />
@@ -28,3 +30,16 @@ export default () => (
     </div>
   </Router>
 )
+
+const Filler = () => {
+  const Wrapper = styled.div`
+      &::before {
+      display: block; 
+      content: " "; 
+      height: 35px; 
+      visibility: hidden; 
+      pointer-events: none;
+    }
+  `;
+  return <Wrapper />
+}

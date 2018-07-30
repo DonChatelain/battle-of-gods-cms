@@ -4,10 +4,9 @@ import styled from 'styled-components';
 import color from '../styles/color-variables';
 
 export default class Tile extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = Object.assign({}, this.props.data);  
-  }
+  // constructor(props) {
+  //   super(props);
+  // }
 
   render() {
     const Wrapper = this.style();
@@ -21,10 +20,22 @@ export default class Tile extends React.Component {
   style() {
     const sectionPadding= '10px';
     return styled.section`
-
+      position: relative;
+      top: 0;
+      left: 0;
       border-bottom: 1px solid #eaeaea;
+
       * {
         margin: 7px 0;
+      }
+      >:last-child {
+        margin-bottom: 15px;
+      }
+      a.anchor-target {
+        position: absolute;
+        top: -35px;
+        left: 0;
+        visibility: hidden;
       }
       h3 {
         font-size: 1.2em;
@@ -34,24 +45,6 @@ export default class Tile extends React.Component {
         flex-wrap: nowrap;
         justify-content: space-between;
         
-        a {
-          border: 2px solid ${color.blue};
-          cursor: pointer;
-          transition: opacity 200ms ease;
-          opacity: 0.75;
-          color: ${color.blue};
-          font-weight: bold;
-          width: calc(50% - 10px * 2) !important;
-          border-radius: 5px;
-          font-size: 0.9em;
-          text-align: center;
-          box-sizing: border-box;
-          padding: 5px;
-
-          &:hover {
-            opacity: 1;
-          }
-        }
         &.full {
           display: block;
           > * {
@@ -91,7 +84,7 @@ export default class Tile extends React.Component {
         width: 100%;
       }
 
-      select, input, textarea {
+      select, input, textarea, a {
         display: block;
         -webkit-appearance: none;
         -moz-appearance: none;
@@ -137,9 +130,17 @@ export default class Tile extends React.Component {
         min-width: 100%;
         max-width: 100%;
         min-height: 75px;
+        letter-spacing: normal;
         font-weight: normal;
         padding:  10px 10px;
         text-indent: 0;
+      }
+
+      a {
+        text-align: center;
+        max-width: 70% !important;
+        margin: 0 auto;
+        color: ${color.blue};
       }
 
       select {
