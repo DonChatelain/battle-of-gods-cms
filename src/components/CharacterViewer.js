@@ -1,14 +1,14 @@
 import React from 'react';
 import axios from 'axios';
 import styled from 'styled-components';
-import { Link } from 'react-router-dom';
 
 import config from '../config';
-import Tile from './Tile';
+import CharacterTile from './CharacterTile';
+
 
 export default class CharacterViewer extends React.Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.state = {
       characters: [],
       editing: null,
@@ -55,58 +55,17 @@ export default class CharacterViewer extends React.Component {
 
   render() {
     const Wrapper = this.style();
-    const displayName = (name, index) => {
-      if (this.state.editing === name) {
-        return (
-          <input type="text"
-                 defaultValue={name}
-                 onBlur={(event) => {
-                   this.onBlur(event.target.value, index, 'name');
-                   this.setState({ editing: null });
-                 }} />
-        ) 
-      }
-      return (
-        <h3 className="row full"
-            onClick={() => this.setState({ editing: name })}>
-          {name}
-        </h3>
-      )
-    }
+
     return (
       <Wrapper>
         {this.state.characters.map((char, i) => {
           return (
-          <Tile data={char} key={i}>
-            <a className="anchor-target" name={char.name}>&nbsp;</a>
-            
-            {displayName(char.name, i)}
-
-            <div className="row half">
-              <div>
-                <label>Health</label>
-                <input type="number"
-                      defaultValue={char.health}
-                      onBlur={(event) => this.onBlur(event.target.value, i, 'health')}
-                />
-              </div>
-              <div>
-                <label>Image</label>
-                <input type="file" /> 
-              </div>
-            </div>
-            <div className="row full">
-              <label>Description</label>
-              <textarea defaultValue={char.description}
-                        onBlur={(event) => this.onBlur(event.target.value, i, 'description')}>
-              </textarea>
-            </div>
-            <div className="row full">
-              <Link to={`/specialcards?owner=${char.name}`}>
-                View Special Cards
-              </Link>
-            </div>
-          </Tile>
+            <CharacterTile
+              character={char}
+              key={i}
+              index={i}
+              onBlur={this.onBlur.bind(this)}>
+            </CharacterTile>
           )
         })}
       </Wrapper>

@@ -4,10 +4,7 @@ import styled from 'styled-components';
 import color from '../styles/color-variables';
 
 export default class Tile extends React.Component {
-  // constructor(props) {
-  //   super(props);
-  // }
-
+  
   render() {
     const Wrapper = this.style();
     return (
