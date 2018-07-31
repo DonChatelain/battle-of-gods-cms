@@ -14,7 +14,9 @@ export default class TeamViewer extends React.Component {
     this.state = {
       teams: [],
       stats: {},
+      editingTeamName: null,
     };
+    this.inputRef = null;
   }
 
   componentDidMount() {
@@ -50,22 +52,48 @@ export default class TeamViewer extends React.Component {
     this.patchData(team.key, newState);
   }
 
+  changeName(newName, index) {
+    this.onChange(newName, index, 'name');
+    this.setState({ editingTeamName: null });
+  }
+
+  displayName(name, key, index) {
+    if (this.state.editingTeamName === key) {
+      return (
+        <input type="text"
+               defaultValue={name}
+               ref={(input) => this.inputRef = input}
+               onBlur={(event) => this.changeName(event.target.value, index)} 
+               onKeyPress={(event) => { if (event.key === 'Enter') this.changeName(event.target.value, index) }} />
+      ) 
+    }
+    return (
+      <h3 className="row full tile-name"
+          onClick={() => {
+            this.setState({ editingTeamName: key }, () => this.inputRef.focus());
+          }}>
+        {name}
+      </h3>
+    )
+  }
+
+  getTeamByKey(teamKey) {
+    const team = this.state.stats[teamKey]
+    return team || {};
+  };
+
   render() {
-    const getTeamByKey = (teamKey) => {
-      const team = this.state.stats[teamKey]
-      return team || {};
-    };
 
     const Wrapper = this.style();
     return (
       <Wrapper>
         {this.state.teams.map((team, i) => 
           <Tile data={team} key={i}>
-            <h3 className="row full">{team.name}</h3>
+            {this.displayName(team.name, team.key, i)}
             <div className="row third stats">
-              <span className="health">{getTeamByKey(team.key).health}</span>
-              <span className="attack">{getTeamByKey(team.key).totalAtk}</span>
-              <span className="defense">{getTeamByKey(team.key).totalDef}</span>
+              <span className="health">{this.getTeamByKey(team.key).health}</span>
+              <span className="attack">{this.getTeamByKey(team.key).totalAtk}</span>
+              <span className="defense">{this.getTeamByKey(team.key).totalDef}</span>
             </div>
             <div className="row half">
               <div>

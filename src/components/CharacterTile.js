@@ -25,7 +25,6 @@ export default class CharacterTile extends Tile {
                className="tile-name"
                defaultValue={this.state.name}
                ref={(input) => this.inputRef = input}
-               onSubmit={() => console.log('fuck')}
                onBlur={(event) => this.changeName(event.target.value)} 
                onKeyPress={(event) => { if (event.key === 'Enter') this.changeName(event.target.value) }} />
       ) 
