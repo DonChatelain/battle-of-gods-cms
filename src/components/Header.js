@@ -22,14 +22,19 @@ export default class Header extends React.Component {
   }
 
   style() {
-    const headerHeight = 35;
+    const headHeight = 35;
+    const headTopExtend = 165;
+    const headLeftExtend = 50;
+    const headTextPaddingLeft = 7;
     return styled.header`
       z-index: 100;
       position: fixed;
       top: 0;
-      width: 100%;
-      height: ${headerHeight}px;
-      line-height: ${headerHeight}px;
+      left: -${headLeftExtend}px;
+      width: 130%;
+      height: ${headHeight + headTopExtend}px;
+      margin-top: -${headTopExtend}px;
+      line-height: ${headHeight}px;
       background: ${color.blue};
       text-transform: uppercase;
       letter-spacing: 2px;
@@ -37,7 +42,9 @@ export default class Header extends React.Component {
       h1 {
         font-size: 1em;
         color: white;
-        padding-left: ${headerHeight / 5}px;
+        position: absolute;
+        bottom: 0;
+        left: ${headLeftExtend + headTextPaddingLeft}px;
       }
     `;
   }

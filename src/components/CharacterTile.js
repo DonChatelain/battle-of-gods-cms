@@ -30,13 +30,27 @@ export default class CharacterTile extends Tile {
       ) 
     }
     return (
-      <h3 className="row full tile-name"
+      <h3 className="tile-name"
           onClick={() => {
             this.setState({ isEditingName: true }, () => this.inputRef.focus());
           }}>
         {this.state.name}
       </h3>
     )
+  }
+
+  displayMinorCount(index) {
+    if (this.state.minorCount != null) {
+      return (
+          <input type="number"
+                 className="major-minor"
+                 defaultValue={this.state.minorCount}
+                 onBlur={(event) => this.props.onBlur(event.target.value, index, 'minorCount')} />
+      )
+    }
+    // return (
+    //   <h4 className="major-minor">Major</h4>
+    // )
   }
 
   render() {
@@ -46,7 +60,10 @@ export default class CharacterTile extends Tile {
       <Tile>
         <a className="anchor-target" name={char.name}>&nbsp;</a>
         
-        {this.displayName()}
+        <div className="row half">
+          {this.displayName()}
+          {this.displayMinorCount(i)}
+        </div>
 
         <div className="row half">
           <div>

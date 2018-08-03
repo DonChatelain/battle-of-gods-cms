@@ -23,7 +23,7 @@ export default class Tile extends React.Component {
       border-bottom: 1px solid #eaeaea;
 
       * {
-        margin: 7px 0;
+        margin: 4px 0;
       }
       >:last-child {
         margin-bottom: 15px;
@@ -56,7 +56,7 @@ export default class Tile extends React.Component {
         }
         &.half {
           * {
-            max-width: 100%;
+            max-width: calc(100% - ${sectionPadding});
             min-width: 50%;
           }
           >* {
@@ -72,6 +72,19 @@ export default class Tile extends React.Component {
             width: calc(33.33% - ${sectionPadding} / 2);
           }
         }
+      }
+
+      .major-minor {
+        opacity: 0.3;
+        font-style: italic;
+        display: flex;
+        align-items: center;
+
+      }
+      input.major-minor {
+        min-width: 50px !important;
+        width: 50px !important;
+        max-width: 50px !important;
       }
 
       label {

@@ -3,14 +3,11 @@ import axios from 'axios';
 import styled from 'styled-components';
 
 import config from '../config';
-import Tile from './Tile';
-// import heartPng from '../static/heart.png';
-// import attackPng from '../static/attack.png';
-// import defensePng from '../static/defense.png';
+import SpecialCardTile from './SpecialCardTile';
 
 export default class TeamViewer extends React.Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.state = {
       cards: [],
       characters: [],
@@ -53,81 +50,18 @@ export default class TeamViewer extends React.Component {
   }
 
   render() {
-    /**
-     * Fields:
-     * 
-     * 1 name : text
-     * 2 owner : select (Character)
-     * 8 effect: textarea
-     * 4 atk : Number
-     * 5 instant: Number
-     * 6, 7 def: Number Checkbox for 100% (-1)
-     * 3 qty: Number (extra: give visual feedback if teams special card allotment goes over the line)
-     */
-
     const Wrapper = this.style();
     return (
       <Wrapper>
+        <Filter characters={this.state.characters}/>
         {this.state.cards.map((card, i) => 
-          <Tile data={card} key={i}>
-            <h3 className="row full">{card.name}</h3>
-            <div className="row half">
-              <div>
-                <label>Owner</label>
-                <select defaultValue={card.owner} 
-                        onChange={(event) => this.onChange(event.target.value, i, 'owner')}>
-                  <option key="-1" value={card.owner}>{card.owner}</option>
-                  {this.state.characters.map((char, i) => {
-                    return <option key={'char_' + i} value={char.name}>{char.name}</option>
-                  })}
-
-                </select>
-              </div>
-              <div>
-                <label>Quantity</label>
-                <input type="number"
-                       onBlur={(event) => this.onChange(event.target.value, i, 'qty')}
-                       defaultValue={card.qty} />
-              </div>
-            </div>
-            <div className="row half">
-              <div>
-                <label>Attack</label>
-                <input type="number"
-                       onBlur={(event) => this.onChange(event.target.value, i, 'atk')}
-                       defaultValue={card.atk} />
-              </div>
-              <div>
-                <label>Instant Damange</label>
-                <input type="number"
-                       onBlur={(event) => this.onChange(event.target.value, i, 'instant')}
-                       defaultValue={card.instant} />
-              </div>
-            </div>
-            <div className="row half">
-              <div>
-                <label>Defense</label>
-                <input type="number"
-                       onBlur={(event) => this.onChange(event.target.value, i, 'def')}
-                       defaultValue={card.def} />
-              </div>
-              <div>
-                <label>Fully Block?</label>
-                <input type="checkbox" disabled
-                       defaultChecked={card.def === -1} />
-                {/* Disabled */}
-              </div>
-            </div>
-            <div className="row full">
-              <div>
-                <label>Effect Description</label>
-                <textarea defaultValue={card.effect}
-                          onBlur={(event) => this.onChange(event.target.value, i, 'effect')}>
-
-                </textarea>
-              </div>
-            </div>
-          </Tile>
+          <SpecialCardTile
+            key={i}
+            card={card}
+            characters={this.state.characters}
+            index={i}
+            onChange={this.onChange.bind(this)}>
+          </SpecialCardTile>
         )}
       </Wrapper>
     );
@@ -151,6 +85,102 @@ export default class TeamViewer extends React.Component {
       @media only screen and (min-width : 768px) {
         > section {
           width: 40%;
+        }
+      }
+    `;
+  }
+}
+
+class Filter extends React.Component {
+  constructor() {
+    super();
+    this.charFilter = new URL(window.location.href).searchParams.get('owner');
+    this.sortables = [
+      {
+        id: 'owner',
+        label: 'Owner'
+      },
+      {
+        id: 'qty',
+        label: 'Quantity'
+      },
+      {
+        id: 'atk',
+        label: 'Attack'
+      },
+      {
+        id: 'def',
+        label: 'Defense'
+      }
+    ]
+  }
+
+  onFilterChange(char) {
+    const url = new URL(window.location.href);
+    if (char === 'none') {
+      url.searchParams.delete('owner');
+    } else {
+      url.searchParams.set('owner', char);
+    }
+    window.location.href = url;
+  }
+
+  render() {
+    const Wrapper = this.style();
+    return (
+      <Wrapper>
+        <div>
+          <span>Filter By Character</span>
+          <select defaultValue={this.charFilter} 
+                  onChange={(event) => this.onFilterChange(event.target.value)}>
+            <option key="-1" value="none">None</option>
+            {this.props.characters.map((char, i) => {
+              return <option key={'char_' + i} value={char.name}>{char.name}</option>
+            })}
+
+          </select>
+        </div>
+
+        <div>
+          <span>Sort By</span>
+          <select defaultValue="character"
+                  onChange={(event) => console.log('sort', event.target.value)}>
+            {
+              this.sortables.map((x, i) => {
+                return <option key={i} value={x.id}>{x.label}</option>
+              })
+            }
+          </select>
+        </div>
+
+        <div>
+          ASC / DSC
+        </div>
+      </Wrapper>
+    )
+  }
+
+  style() {
+    return styled.div`
+      width: 100%;
+      display: flex;
+      justify-content: space-around;
+      border-bottom: 1px solid #eaeaea;
+      padding-bottom: 20px;
+
+      div {
+        /* width: 300px; */
+
+        span {
+          opacity: 0.5;
+          font-size: 0.8em;
+        }
+
+        select {
+          /* width: 100%; */
+          -webkit-appearance: none;
+          height: 30px;
+          text-indent: 10px;
         }
       }
     `;

@@ -28,11 +28,11 @@ export default class Login extends React.Component {
     console.log('Signing in...');
     console.log('req to ', config.API_URL);
     // Make a request for a user with a given ID
-    axios.get(config.API_URL + '/api/teams')
+    axios.get(config.API_URL + '/teams')
       .then(function (response) {
         console.log(response);
         // document.cookie = 'token=' + response.data.token;
-        // window.location.href = '/dashboard';
+        window.location.href = '/cms';
       })
       .catch(function (error) {
         // handle error

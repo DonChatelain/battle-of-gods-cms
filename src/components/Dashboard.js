@@ -28,10 +28,10 @@ export default class Header extends React.Component {
     const Wrapper = this.style();
     return (
       <Wrapper>
-        <Link to="/characters"><div>Characters</div></Link>
-        <Link to="/teams"><div>Teams</div></Link>
-        <Link to="/specialcards"><div>Special Cards</div></Link>
-        <Link to="/basiccards"><div>Basic Cards</div></Link>
+        <div><Link to="/characters">Characters</Link></div>
+        <div><Link to="/teams">Teams</Link></div>
+        <div><Link to="/specialcards">Special Cards</Link></div>
+        <div><Link to="/basiccards">Basic Cards</Link></div>
       </Wrapper>
     );
   }
@@ -48,23 +48,41 @@ export default class Header extends React.Component {
   style() {
     return styled.main`
       background: black;
+      display: flex;
+      flex-direction: column;
+      flex-wrap: wrap;
 
       div {
         width: 100%;
         height: calc(25vh - 12px);
         font-size: 1.5em;
-        display: flex;
-        align-items: center;
-        justify-content: center;
+        border-left: 1px solid #eaeaea;
         border-bottom: 1px solid #eaeaea;
         box-sizing: border-box;
-        cursor: pointer;
         transition: opacity 300ms ease;
         opacity: 0.95;
         background: white;
 
         &:hover {
           opacity: 1;
+        }
+
+        a {
+          width: 100%;
+          height: 100%;
+          display: flex;
+          align-items: center;
+          cursor: pointer;
+          justify-content: center;
+        }
+      }
+
+      @media only screen and (min-width : 768px) {
+        flex-direction: row;
+
+        div {
+          width: 50%;
+          height: calc(50vh - 12px)
         }
       }
     `;
