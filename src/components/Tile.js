@@ -108,7 +108,7 @@ export default class Tile extends React.Component {
         box-shadow: 1px 2px 7px 0px rgba(0,0,0,0.3);
         text-indent: 10px;
         border: none;
-        border-bottom: solid 2px ${color.blue};
+        border-bottom: solid 2px ${color.purple};
         border-bottom-left-radius: 0% !important;
         border-bottom-right-radius: 0% !important;
         border-radius: 0% !important;
@@ -128,8 +128,8 @@ export default class Tile extends React.Component {
         }
 
         &[type=checkbox]:checked {
-          background: ${color.blue};
-          border: 2px solid ${color.blue};
+          background: ${color.purple};
+          border: 2px solid ${color.purple};
         }
         &:disabled {
           opacity: 0.2;
@@ -150,7 +150,7 @@ export default class Tile extends React.Component {
         text-align: center;
         max-width: 70% !important;
         margin: 0 auto;
-        color: ${color.blue};
+        color: ${color.purple};
       }
 
       select {

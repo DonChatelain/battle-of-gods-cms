@@ -5,15 +5,12 @@ import styled from 'styled-components';
 import petsematary from '../static/petsematary.jpg';
 
 export default class NotFound extends React.Component {
-  // constructor() {
-  //   super();
-  // }
 
   render() {
     const Wrapper = this.style();
     return (
       <Wrapper>
-        <h1>404</h1>
+        <h1>Page Not Found</h1>
         <div className="image-container"></div>
         <h2>You Don't Wanna Go Down That Road...</h2>
         <Link to="/cms">Go Back</Link>

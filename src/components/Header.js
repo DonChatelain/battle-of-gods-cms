@@ -1,13 +1,35 @@
 import React from 'react';
 import styled from 'styled-components';
-import { Link } from 'react-router-dom'
+import { Link, withRouter } from 'react-router-dom'
 
-import color from '../styles/color-variables';
+class Header extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      title: 'Content Management',
+    };
+  }
 
-export default class Header extends React.Component {
-  // constructor() {
-  //   super();
-  // }
+  shouldComponentUpdate(nextProps, nextState) {
+    return nextState.title !== this.state.title;
+  }
+
+  componentDidMount() {
+    this.onHistoryChange(this.props.history.location.pathname)
+    this.props.history.listen(location => this.onHistoryChange(location.pathname));
+  };
+
+  onHistoryChange(pathname) {
+    let title;
+    switch(pathname) {
+      case '/characters': title = 'Characters'; break;
+      case '/specialcards': title = 'Special Cards'; break;
+      case '/teams': title = 'Teams'; break;
+      case '/basiccards': title = 'Basic Cards'; break;
+      default: title = 'Content Management'; break;
+    }
+    this.setState({ title })
+  }
 
   render() {
     const Wrapper = this.style();
@@ -15,8 +37,13 @@ export default class Header extends React.Component {
     return (
       <Wrapper>
         <Link to="/cms">
-          <h1>Battle of Gods</h1>
+          <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px"
+            width="96" height="96"
+            viewBox="0 0 48 48"
+            style={{fill: '#ffffff'}}><g id="surface1"><path style={{fill: '#E65100'}} d="M 40 37 L 21 10 L 3 37 Z "></path><path style={{fill: '#F57C00'}} d="M 32.769531 20.398438 L 20 37 L 45 37 Z "></path><path style={{fill: '#BF360C'}} d="M 16.828125 34.5625 L 14.953125 37 L 20 37 L 30.441406 23.421875 L 28.03125 19.992188 Z "></path></g>
+          </svg>
         </Link>
+        <h1>{this.state.title}</h1>
       </Wrapper>
     );
   }
@@ -25,7 +52,7 @@ export default class Header extends React.Component {
     const headHeight = 35;
     const headTopExtend = 165;
     const headLeftExtend = 50;
-    const headTextPaddingLeft = 7;
+    const headTextPaddingLeft = 50;
     return styled.header`
       z-index: 100;
       position: fixed;
@@ -35,17 +62,33 @@ export default class Header extends React.Component {
       height: ${headHeight + headTopExtend}px;
       margin-top: -${headTopExtend}px;
       line-height: ${headHeight}px;
-      background: ${color.blue};
-      text-transform: uppercase;
-      letter-spacing: 2px;
+      background: #4e54c8;  /* fallback for old browsers */
+      background: -webkit-linear-gradient(to left, #8f94fb, #4e54c8);  /* Chrome 10-25, Safari 5.1-6 */
+      background: linear-gradient(to left, #8f94fb, #4e54c8); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+      letter-spacing: 1px;
+
+      a:hover svg {
+        filter: grayscale(0);
+      }
 
       h1 {
         font-size: 1em;
         color: white;
         position: absolute;
-        bottom: 0;
+        bottom: -2px;
         left: ${headLeftExtend + headTextPaddingLeft}px;
+      }
+
+      svg {
+        position: absolute;
+        left: ${headLeftExtend + 7}px;
+        bottom: 0;
+        width: 35px;
+        height: 35px;
+        filter: grayscale(0.7);
       }
     `;
   }
 }
+
+export default withRouter(Header);
