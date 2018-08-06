@@ -14,7 +14,7 @@ export default class CharacterTile extends Tile {
   }
 
   changeName(newName) {
-    this.props.onBlur(newName, this.props.index, 'name');
+    this.props.onBlur(newName, this.state._id, 'name');
     this.setState({ isEditingName: false, name: newName });
   }
 
@@ -45,7 +45,7 @@ export default class CharacterTile extends Tile {
           <input type="number"
                  className="major-minor"
                  defaultValue={this.state.minorCount}
-                 onBlur={(event) => this.props.onBlur(event.target.value, index, 'minorCount')} />
+                 onBlur={(event) => this.props.onBlur(event.target.value, this.state._id, 'minorCount')} />
       )
     }
     // return (
@@ -55,14 +55,17 @@ export default class CharacterTile extends Tile {
 
   render() {
     const char = this.state;
-    const i = this.props.index;
+    const id = this.state._id;
+    const getImageFileText = () => {
+      return 'No Image Uploaded'
+    };
     return (
       <Tile>
         <a className="anchor-target" name={char.name}>&nbsp;</a>
         
         <div className="row half">
           {this.displayName()}
-          {this.displayMinorCount(i)}
+          {this.displayMinorCount(this.props.index)}
         </div>
 
         <div className="row half">
@@ -70,18 +73,29 @@ export default class CharacterTile extends Tile {
             <label>Health</label>
             <input type="number"
                   defaultValue={char.health}
-                  onBlur={(event) => this.props.onBlur(event.target.value, i, 'health')}
+                  onBlur={(event) => this.props.onBlur(event.target.value, id, 'health')}
             />
           </div>
           <div>
             <label>Image</label>
-            <input type="file" /> 
+            <label className="file-input"
+                   style={{ backgroundImage: `url(${char.image})`}}
+                   htmlFor={char.name + "_image_input"}>
+              {getImageFileText()}
+            </label>
+            <input type="file" 
+                   id={char.name + "_image_input"}
+                   onChange={(event) => {
+                     console.log('upload image! just kidding', event.target.files[0])
+                     this.props.handleFile(char._id, event.target.files[0])
+                  }}
+            /> 
           </div>
         </div>
         <div className="row full">
           <label>Description</label>
           <textarea defaultValue={char.description}
-                    onBlur={(event) => this.props.onBlur(event.target.value, i, 'description')}>
+                    onBlur={(event) => this.props.onBlur(event.target.value, id, 'description')}>
           </textarea>
         </div>
         <div className="row full">

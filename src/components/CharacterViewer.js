@@ -29,18 +29,34 @@ export default class CharacterViewer extends React.Component {
       .catch(err => console.error(err));
   }
 
-  onBlur(value, charIndex, field) {
+  onBlur(value, charId, field) {
     const newState = {};
     newState[field] = value;
-    const char = this.state.characters.find(c => c.index === charIndex);
-    if (char[field] === newState[field]) return;
+    const char = this.state.characters.find(c => c._id === charId);
+    if (!char || char[field] === newState[field]) return;
     char[field] = newState[field];
-    this.patchData(charIndex, newState);
+    this.patchData(charId, newState);
   }
 
-  patchData(index, data) {
+  handleFile(id, file) {
+    console.log(file)
+    if (!file) return;
+
+    const data = new FormData();
+    data.append('name', file.name);
+    data.append('type', 'character');
+    data.append('id', id);
+    data.append('file', file);
+    
     axios
-      .patch(`${config.API_URL}/characters/${index}`, data)
+      .post(`${config.API_URL}/imageuploads`, data)
+      .then(res => console.log(res.data))
+      .catch(err => console.error(err));
+  }
+
+  patchData(id, data) {
+    axios
+      .patch(`${config.API_URL}/characters/${id}`, data)
       .then(res => console.log(res.data))
       .catch(err => console.error(err));
   }
@@ -64,7 +80,8 @@ export default class CharacterViewer extends React.Component {
               character={char}
               key={i}
               index={i}
-              onBlur={this.onBlur.bind(this)}>
+              onBlur={this.onBlur.bind(this)}
+              handleFile={this.handleFile.bind(this)}>
             </CharacterTile>
           )
         })}

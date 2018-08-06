@@ -28,9 +28,10 @@ router.get('/:name', (req, res) => {
 });
 
 // PATCH
-router.patch('/:index', (req, res) => {
-  const query = { index: req.params.index };
+router.patch('/:id', (req, res) => {
+  const query = { _id: req.params.id };
   delete req.body.team;
+  delete req.body.id;
   delete req.body.index;
   Character.updateOne(query, { $set: req.body })
       .then(char => res.json(char))

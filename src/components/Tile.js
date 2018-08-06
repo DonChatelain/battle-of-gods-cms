@@ -94,7 +94,7 @@ export default class Tile extends React.Component {
         width: 100%;
       }
 
-      select, input, textarea, a {
+      select, input, textarea, a, label.file-input {
         display: block;
         -webkit-appearance: none;
         -moz-appearance: none;
@@ -108,7 +108,7 @@ export default class Tile extends React.Component {
         box-shadow: 1px 2px 7px 0px rgba(0,0,0,0.3);
         text-indent: 10px;
         border: none;
-        border-bottom: solid 2px ${color.purple};
+        border-bottom: solid 2px ${color.blue};
         border-bottom-left-radius: 0% !important;
         border-bottom-right-radius: 0% !important;
         border-radius: 0% !important;
@@ -125,15 +125,23 @@ export default class Tile extends React.Component {
         &[type=file] {
           line-height: 2.5;
           text-indent: 0;
+          position: absolute;
+          left: -9999px;
         }
 
         &[type=checkbox]:checked {
-          background: ${color.purple};
-          border: 2px solid ${color.purple};
+          background: ${color.blue};
+          border: 2px solid ${color.blue};
         }
         &:disabled {
           opacity: 0.2;
         }
+      }
+
+      label.file-input {
+        color: black;
+        letter-spacing: normal;
+        line-height: 30px;
       }
 
       textarea {
@@ -150,7 +158,7 @@ export default class Tile extends React.Component {
         text-align: center;
         max-width: 70% !important;
         margin: 0 auto;
-        color: ${color.purple};
+        color: ${color.blue};
       }
 
       select {

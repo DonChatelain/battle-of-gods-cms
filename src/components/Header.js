@@ -62,10 +62,25 @@ class Header extends React.Component {
       height: ${headHeight + headTopExtend}px;
       margin-top: -${headTopExtend}px;
       line-height: ${headHeight}px;
-      background: #4e54c8;  /* fallback for old browsers */
-      background: -webkit-linear-gradient(to left, #8f94fb, #4e54c8);  /* Chrome 10-25, Safari 5.1-6 */
-      background: linear-gradient(to left, #8f94fb, #4e54c8); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
       letter-spacing: 1px;
+
+      background: #3189d2;  /* fallback for old browsers */
+      background: -webkit-linear-gradient(to right,#3189d2,#7fc6ff);  /* Chrome 10-25, Safari 5.1-6 */
+      background: linear-gradient(to right,#3189d2,#7fc6ff); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+      background: linear-gradient(to right,#3189d2,#7fc6ff);
+
+      a {
+        position: absolute;
+        left: ${headTextPaddingLeft}px;
+        bottom: 0;
+        width: 42px;
+        background: transparent;
+        transition: background-color 300ms ease;
+      }
+
+      a:hover {
+        background: rgba(255, 255, 255, 0.2);
+      }
 
       a:hover svg {
         filter: grayscale(0);
@@ -80,9 +95,9 @@ class Header extends React.Component {
       }
 
       svg {
-        position: absolute;
-        left: ${headLeftExtend + 7}px;
-        bottom: 0;
+        position: relative;
+        left: 3px;
+        top: 14px;
         width: 35px;
         height: 35px;
         filter: grayscale(0.7);
