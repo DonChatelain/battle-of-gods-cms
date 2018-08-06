@@ -142,6 +142,8 @@ export default class Tile extends React.Component {
         color: black;
         letter-spacing: normal;
         line-height: 30px;
+        background-size: 100%;
+        background-position-y: center;
       }
 
       textarea {

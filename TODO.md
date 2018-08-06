@@ -16,6 +16,8 @@ Will hook into network methods on Service class (also TODO)
 - Reusable Filter component that controls url query; primarily for sp cards, then for characters
 - somehow add url hash in /characters when navigating back from its linked special card page (request referrer?)
 - req for more sp cards as you scroll
+- Lightbox to view character images (reusable for special cards)
+- Sp card image support
 
 ------
 

@@ -57,7 +57,8 @@ export default class CharacterTile extends Tile {
     const char = this.state;
     const id = this.state._id;
     const getImageFileText = () => {
-      return 'No Image Uploaded'
+      if (this.state.image === '')
+        return 'No Image Uploaded'
     };
     return (
       <Tile>
@@ -79,7 +80,7 @@ export default class CharacterTile extends Tile {
           <div>
             <label>Image</label>
             <label className="file-input"
-                   style={{ backgroundImage: `url(${char.image})`}}
+                   style={{ backgroundImage: `url(character_images/${char.image})`}}
                    htmlFor={char.name + "_image_input"}>
               {getImageFileText()}
             </label>
@@ -87,7 +88,7 @@ export default class CharacterTile extends Tile {
                    id={char.name + "_image_input"}
                    onChange={(event) => {
                      console.log('upload image! just kidding', event.target.files[0])
-                     this.props.handleFile(char._id, event.target.files[0])
+                     this.props.handleFile(char._id, event.target.files[0], (filename) => this.setState({ image: filename }))
                   }}
             /> 
           </div>

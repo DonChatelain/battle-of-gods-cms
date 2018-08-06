@@ -38,7 +38,7 @@ export default class CharacterViewer extends React.Component {
     this.patchData(charId, newState);
   }
 
-  handleFile(id, file) {
+  handleFile(id, file, cb) {
     console.log(file)
     if (!file) return;
 
@@ -47,10 +47,10 @@ export default class CharacterViewer extends React.Component {
     data.append('type', 'character');
     data.append('id', id);
     data.append('file', file);
-    
+
     axios
       .post(`${config.API_URL}/imageuploads`, data)
-      .then(res => console.log(res.data))
+      .then(res => cb(file.name))
       .catch(err => console.error(err));
   }
 

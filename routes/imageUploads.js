@@ -5,7 +5,7 @@ const fs = require('fs');
 
 const { Character } = require('../models');
 
-const TEMP_DIR = path.join(__dirname, '..', 'temp', 'character_images');
+const TEMP_DIR = path.join(__dirname, '..', 'temp');
 const router = express.Router();
 const upload = multer({ dest: TEMP_DIR });
 
