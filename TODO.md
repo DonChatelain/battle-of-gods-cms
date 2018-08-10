@@ -1,27 +1,32 @@
 # TODO
 
+### HIGH!
+- fix cards (see bottom)
+- Basic Card View: RED, BLUE, GREEN stats: atk def qt Numbers
+- Lightbox to view character images (reusable for special cards)
+- asc / desc button - sp cards
+- Sp card sorter functionality
+- req for more sp cards as you scroll
+- Figure out way to change special card defense value to Fully Block
+
+### MEDIUM
+- BIGGY: For accurate stat aggregation, figure out how to account for full block counters, and instant damage....???
+- Redo "Home" button
+- Proper Signout button logic (component probably)
+- Sp card image support
+- CSS Loader while data fetching
+
+### LOW
+- setup subtle animation to fire on Header indicating DB save and new item in Undo stack. Will hook into network methods on Service class (also TODO) ? Click on hamburger menu in Header to show list with Undo button
+- somehow add url hash in /characters when navigating back from its linked special card page (request referrer?)
 - Set up Trash Bin collection / transfer system
 - Display team (name + faction symbol) ???
 - Display aggregate stats per character
-- File upload USE LABEL and hide this shit
 - Undo system (create alongside Trash bin system)
-This will be cool - setup subtle animation to fire on Header indicating DB save and new item in Undo stack
-Will hook into network methods on Service class (also TODO)
-? Click on hamburger menu in Header to show list with Undo button
-- Basic Card View: RED, BLUE, GREEN stats: atk def qt Numbers
-- CSS Loader while data fetching
-- BIGGY: For accurate stat aggregation, figure out how to account for full block counters, and instant damage....???
-- Change way to patch Character name- currently broken in case of filtering characters via query
-- Figure out way to change special card defense value to Fully Block
-- Reusable Filter component that controls url query; primarily for sp cards, then for characters
-- somehow add url hash in /characters when navigating back from its linked special card page (request referrer?)
-- req for more sp cards as you scroll
-- Lightbox to view character images (reusable for special cards)
-- Sp card image support
 
 ------
 
-### FUCK UP! TODO: 
+## FUCK UP! TODO: 
 Following cards value fixing:
 - Soul Collector
 - Scent of Death

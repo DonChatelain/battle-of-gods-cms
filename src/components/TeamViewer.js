@@ -23,7 +23,12 @@ export default class TeamViewer extends React.Component {
     axios
       .get(config.API_URL + '/teams')
       .then(res => this.setState({ teams: res.data }, this.fetchStats))
-      .catch(err => console.error(err));
+      .catch(err => {
+        if (err.response && err.response.status === 401) {
+          window.location.href = '/signin'
+        }
+        console.error(err)
+      });
   }
 
   fetchStats() {

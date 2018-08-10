@@ -17,29 +17,26 @@ export default class Login extends React.Component {
 
   onSubmit(e) {
     e.preventDefault();
-    // console.log('prevalidate', this.userRef.current);
-    // const error = this.preValidateLogin(
-    //   this.userRef.current.value,
-    //   this.passRef.current.value
-    // );
-    // if (error) {
-    //   return this.setState({ error });
-    // }
-    console.log('Signing in...');
-    console.log('req to ', config.API_URL);
-    // Make a request for a user with a given ID
-    axios.get(config.API_URL + '/teams')
-      .then(function (response) {
-        console.log(response);
-        // document.cookie = 'token=' + response.data.token;
-        window.location.href = '/cms';
+    const name = this.userRef.current.value;
+    const password = this.passRef.current.value;
+    const error = this.preValidateLogin(name, password);
+    if (error) return this.setState({ error });
+
+    axios
+      .post(config.API_URL + '/auth/signin', { name, password })
+      .then(res => {
+        if (res.data.success === true) {
+          localStorage.setItem('BOG_JWT', res.data.token);
+          window.location.href = '/cms';
+        } else {
+          this.setState({ error: res.data.msg });
+        }
       })
-      .catch(function (error) {
-        // handle error
-        console.log(error);
-      })
-      .then(function () {
-        // always executed
+      .catch(err => {
+        if (err.response) {
+          this.setState({ error: err.response })
+        }
+        console.error(error);
       });
   }
 
@@ -57,7 +54,6 @@ export default class Login extends React.Component {
     const Wrapper = this.style();
     return (
       <Wrapper>
-        <h1>Content Management System</h1>
         <p>You must be signed in to enter</p>
         <p className="login-error">{this.state.error}</p>
 
@@ -105,6 +101,7 @@ export default class Login extends React.Component {
         input {
           display: block;
           width: 80%;
+          max-width: 500px;
           height: 50px;
           padding: 0 20px;
           margin: 10px auto;
@@ -118,6 +115,7 @@ export default class Login extends React.Component {
             margin-top: 30px;
             border: none;
             text-transform: uppercase;
+            cursor: pointer;
           }
         }
       }

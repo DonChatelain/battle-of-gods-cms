@@ -26,7 +26,12 @@ export default class CharacterViewer extends React.Component {
     axios
       .get(config.API_URL + '/characters?' + queries.join('&'))
       .then(res => this.setState({ characters: res.data }))
-      .catch(err => console.error(err));
+      .catch(err => {
+        if (err.response && err.response.status === 401) {
+          window.location.href = '/signin'
+        }
+        console.error(err)
+      });
   }
 
   onBlur(value, charId, field) {
@@ -39,7 +44,6 @@ export default class CharacterViewer extends React.Component {
   }
 
   handleFile(id, file, cb) {
-    console.log(file)
     if (!file) return;
 
     const data = new FormData();

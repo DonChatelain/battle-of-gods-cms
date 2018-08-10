@@ -5,6 +5,7 @@ import {
   Switch,
 } from 'react-router-dom';
 import styled from 'styled-components';
+import axios from 'axios';
 
 import Dashboard from './Dashboard';
 import Header from './Header';
@@ -30,6 +31,11 @@ export default () => (
     </div>
   </Router>
 )
+
+axios.interceptors.request.use(config => {
+  config.headers['Authorization'] = localStorage.getItem('BOG_JWT');  
+  return config;
+});
 
 const Filler = () => {
   const Wrapper = styled.div`

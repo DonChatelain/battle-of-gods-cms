@@ -23,7 +23,12 @@ export default class TeamViewer extends React.Component {
     axios
       .get(config.API_URL + '/specialcards?' + queries.join('&'))
       .then(res => this.setState({ cards: res.data }, this.fetchCharacterNames))
-      .catch(err => console.error(err));
+      .catch(err => {
+        if (err.response && err.response.status === 401) {
+          window.location.href = '/signin'
+        }
+        console.error(err)
+      })
   }
 
   patchData(id, data) {
