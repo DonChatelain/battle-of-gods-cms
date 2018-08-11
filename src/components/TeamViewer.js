@@ -31,6 +31,12 @@ export default class TeamViewer extends React.Component {
       });
   }
 
+  displayLoader() {
+    if (this.state.teams.length === 0) {
+      return <div className="lds-ellipsis"><div></div><div></div><div></div><div></div></div>
+    }
+  }
+
   fetchStats() {
     axios 
       .get(config.API_URL + '/teams?statsonly=true')
@@ -92,6 +98,7 @@ export default class TeamViewer extends React.Component {
     const Wrapper = this.style();
     return (
       <Wrapper>
+        {this.displayLoader()}
         {this.state.teams.map((team, i) => 
           <Tile data={team} key={i}>
             {this.displayName(team.name, team.key, i)}

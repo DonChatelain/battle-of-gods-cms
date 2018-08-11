@@ -14,6 +14,7 @@ import Login from './Login';
 import TeamViewer from './TeamViewer';
 import CharacterViewer from './CharacterViewer';
 import SpecialCardViewer from './SpecialCardViewer';
+import BasicCardViewer from './BasicCardViewer';
 
 export default () => (
   <Router>
@@ -26,6 +27,7 @@ export default () => (
         <Route exact path="/teams" component={TeamViewer} />
         <Route exact path="/characters" component={CharacterViewer} />
         <Route exact path="/specialcards" component={SpecialCardViewer} />
+        <Route exact path="/basiccards" component={BasicCardViewer} />
         <Route component={NotFound} />
       </Switch>
     </div>

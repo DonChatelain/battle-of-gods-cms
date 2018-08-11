@@ -34,6 +34,12 @@ export default class CharacterViewer extends React.Component {
       });
   }
 
+  displayLoader() {
+    if (this.state.characters.length === 0) {
+      return <div className="lds-ellipsis"><div></div><div></div><div></div><div></div></div>
+    }
+  }
+
   onBlur(value, charId, field) {
     const newState = {};
     newState[field] = value;
@@ -78,6 +84,7 @@ export default class CharacterViewer extends React.Component {
 
     return (
       <Wrapper>
+        {this.displayLoader()}
         {this.state.characters.map((char, i) => {
           return (
             <CharacterTile

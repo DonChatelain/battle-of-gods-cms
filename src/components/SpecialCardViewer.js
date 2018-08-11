@@ -31,6 +31,12 @@ export default class TeamViewer extends React.Component {
       })
   }
 
+  displayLoader() {
+    if (this.state.cards.length === 0) {
+      return <div className="lds-ellipsis"><div></div><div></div><div></div><div></div></div>
+    }
+  }
+
   patchData(id, data) {
     axios
       .patch(`${config.API_URL}/specialcards/${id}`, data)
@@ -59,6 +65,7 @@ export default class TeamViewer extends React.Component {
     return (
       <Wrapper>
         <Filter characters={this.state.characters}/>
+        {this.displayLoader()}
         {this.state.cards.map((card, i) => 
           <SpecialCardTile
             key={i}

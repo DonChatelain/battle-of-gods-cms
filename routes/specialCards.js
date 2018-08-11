@@ -33,7 +33,6 @@ router.get('/:name', (req, res) => {
 // PATCH
 router.patch('/:id', (req, res) => {
   const query = { _id: req.params.id };
-  console.log(query, req.body)
   SpecialCard.updateOne(query, { $set: req.body })
       .then(card => res.json(card))
       .catch(error => res.json({ error }));
