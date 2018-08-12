@@ -121,6 +121,9 @@ export default class Tile extends React.Component {
       }
 
       input {
+        &[type=submit] {
+          -webkit-appearance: none;
+        }
 
         &[type=file] {
           line-height: 2.5;

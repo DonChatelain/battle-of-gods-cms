@@ -17,11 +17,15 @@ export default class TeamViewer extends React.Component {
       editingTeamName: null,
     };
     this.inputRef = null;
+    this.cancelRequest = () => {};
   }
 
   componentDidMount() {
     axios
-      .get(config.API_URL + '/teams')
+      .get(
+        config.API_URL + '/teams',
+        { cancelToken: new axios.CancelToken(executor => this.cancelRequest = executor) },
+      )
       .then(res => this.setState({ teams: res.data }, this.fetchStats))
       .catch(err => {
         if (err.response && err.response.status === 401) {
@@ -48,6 +52,8 @@ export default class TeamViewer extends React.Component {
   }
 
   patchData(key, data) {
+    this.cancelRequest();
+    
     axios
       .patch(`${config.API_URL}/teams/${key}`, data)
       .then(res => console.log(res.data))
@@ -92,6 +98,10 @@ export default class TeamViewer extends React.Component {
     const team = this.state.stats[teamKey]
     return team || {};
   };
+
+  componentWillUnmount() {
+    this.cancelRequest();
+  }
 
   render() {
 

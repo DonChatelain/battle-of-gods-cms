@@ -13,6 +13,7 @@ export default class SpecialCardTile extends Tile {
       classData: [],
       display: false,
     };
+    this.cancelRequest = () => {};
   }
 
   displayLoader() {
@@ -21,13 +22,22 @@ export default class SpecialCardTile extends Tile {
     }
   }
 
+  componentWillUnmount() {
+    this.cancelRequest();
+  }
+
   fetchClassDataByColor(color) {
     this.setState({ display: !this.state.display });
 
     if (this.state.classData.length > 0) return;
 
+    this.cancelRequest();
+
     axios
-      .get(config.API_URL + '/basiccardclasses/' + color)
+      .get(
+        config.API_URL + '/basiccardclasses/' + color,
+        { cancelToken: new axios.CancelToken(executor => this.cancelRequest = executor) },
+      )
       .then(res => this.setState({ classData: res.data.cards }))
       .catch(err => {
         if (err.response && err.response.status === 401) {

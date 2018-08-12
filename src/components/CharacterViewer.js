@@ -13,6 +13,7 @@ export default class CharacterViewer extends React.Component {
       characters: [],
       editing: null,
     };
+    this.cancelRequest = () => {};
   }
 
   componentDidMount() {
@@ -24,7 +25,10 @@ export default class CharacterViewer extends React.Component {
       url.searchParams.get('health') ? 'health=' + url.searchParams.get('health') : ''
     ];
     axios
-      .get(config.API_URL + '/characters?' + queries.join('&'))
+      .get(
+        config.API_URL + '/characters?' + queries.join('&'),
+        { cancelToken: new axios.CancelToken(executor => this.cancelRequest = executor) },
+      )
       .then(res => this.setState({ characters: res.data }))
       .catch(err => {
         if (err.response && err.response.status === 401) {
@@ -32,6 +36,10 @@ export default class CharacterViewer extends React.Component {
         }
         console.error(err)
       });
+  }
+
+  componentWillUnmount() {
+    this.cancelRequest();
   }
 
   displayLoader() {
@@ -65,6 +73,8 @@ export default class CharacterViewer extends React.Component {
   }
 
   patchData(id, data) {
+    this.cancelRequest();
+    
     axios
       .patch(`${config.API_URL}/characters/${id}`, data)
       .then(res => console.log(res.data))

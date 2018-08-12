@@ -12,6 +12,7 @@ export default class TeamViewer extends React.Component {
       cards: [],
       characters: [],
     };
+    this.cancelRequest = () => {}; // reassigned by axios before req
   }
 
   componentDidMount() {
@@ -21,7 +22,10 @@ export default class TeamViewer extends React.Component {
       url.searchParams.get('limit') ? 'limit=' + url.searchParams.get('limit') : ''
     ];
     axios
-      .get(config.API_URL + '/specialcards?' + queries.join('&'))
+      .get(
+        config.API_URL + '/specialcards?' + queries.join('&'),
+        { cancelToken: new axios.CancelToken(executor => this.cancelRequest = executor) },
+      )
       .then(res => this.setState({ cards: res.data }, this.fetchCharacterNames))
       .catch(err => {
         if (err.response && err.response.status === 401) {
@@ -31,6 +35,10 @@ export default class TeamViewer extends React.Component {
       })
   }
 
+  componentWillUnmount() {
+    this.cancelRequest();
+  }
+
   displayLoader() {
     if (this.state.cards.length === 0) {
       return <div className="lds-ellipsis"><div></div><div></div><div></div><div></div></div>
@@ -38,8 +46,14 @@ export default class TeamViewer extends React.Component {
   }
 
   patchData(id, data) {
+    this.cancelRequest();
+
     axios
-      .patch(`${config.API_URL}/specialcards/${id}`, data)
+      .patch(
+        `${config.API_URL}/specialcards/${id}`,
+        data,
+        { cancelToken: new axios.CancelToken(executor => this.cancelRequest = executor) },
+      )
       .then(res => console.log(res.data))
       .catch(err => console.error(err));
   }
@@ -104,8 +118,8 @@ export default class TeamViewer extends React.Component {
 }
 
 class Filter extends React.Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.charFilter = new URL(window.location.href).searchParams.get('owner');
     this.sortables = [
       {

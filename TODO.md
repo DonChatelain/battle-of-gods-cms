@@ -7,12 +7,14 @@
 - Sp card sorter functionality
 - req for more sp cards as you scroll
 - Figure out way to change special card defense value to Fully Block
+- Client side patch support for Basic card classes
 
 ### MEDIUM
 - BIGGY: For accurate stat aggregation, figure out how to account for full block counters, and instant damage....???
 - Redo "Home" button
 - Proper Signout button logic (component probably)
 - Sp card image support
+
 
 ### LOW
 - setup subtle animation to fire on Header indicating DB save and new item in Undo stack. Will hook into network methods on Service class (also TODO) ? Click on hamburger menu in Header to show list with Undo button

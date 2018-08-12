@@ -6,24 +6,38 @@ import config from '../config.js';
 import color from '../styles/color-variables';
 
 export default class Login extends React.Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.state = {
       error: '',
+      loading: false,
     };
-    this.userRef = React.createRef();
-    this.passRef = React.createRef();
+
+    this.cancelRequest = () => {}; // reassigned by axios before req
   }
 
-  onSubmit(e) {
+  componentWillUnmount() {
+    this.cancelRequest();
+  }
+
+  onSubmit(e, name, password) {
     e.preventDefault();
-    const name = this.userRef.current.value;
-    const password = this.passRef.current.value;
+    if (this.state.error) this.setState({ error: '' });
     const error = this.preValidateLogin(name, password);
     if (error) return this.setState({ error });
 
+    this.setState({ loading: true });
+
+    if (typeof this.cancelRequest === 'function') {
+      this.cancelRequest();
+    }
+
     axios
-      .post(config.API_URL + '/auth/signin', { name, password })
+      .post(
+        config.API_URL + '/auth/signin',
+        { name, password },
+        { cancelToken: new axios.CancelToken(executor => this.cancelRequest = executor) },
+      )
       .then(res => {
         if (res.data.success === true) {
           localStorage.setItem('BOG_JWT', res.data.token);
@@ -34,10 +48,17 @@ export default class Login extends React.Component {
       })
       .catch(err => {
         if (err.response) {
-          this.setState({ error: err.response })
+          this.setState({ error: err.message })
         }
-        console.error(error);
-      });
+        console.error(err.message);
+      })
+      .finally(() => this.setState({ loading: false }));
+  }
+
+  displayLoader() {
+    if (this.state.loading) {
+      return <div style={{ position: 'static', transform: 'translateX(0)' }} className="lds-ellipsis"><div></div><div></div><div></div><div></div></div>
+    }
   }
 
   preValidateLogin(user = '', password = '') {
@@ -51,28 +72,15 @@ export default class Login extends React.Component {
   }
 
   render() {
+    console.log('render')
     const Wrapper = this.style();
     return (
       <Wrapper>
         <p>You must be signed in to enter</p>
         <p className="login-error">{this.state.error}</p>
 
-        <form onSubmit={this.onSubmit.bind(this)}>
-          <input type="text"
-                 id="username"
-                 key="username"
-                 ref={this.userRef}
-                 placeholder="Username" />
-
-          <input type="password"
-                 id="password"
-                 key="password"
-                 ref={this.passRef}
-                 placeholder="Password" />
-
-          <input type="submit"
-                 value="Sign In" />
-        </form>
+        <LoginForm onSubmit={this.onSubmit.bind(this)}/>
+        {this.displayLoader()}
       </Wrapper>
     );
   }
@@ -122,3 +130,34 @@ export default class Login extends React.Component {
     `
   }
 }
+
+class LoginForm extends React.Component {
+  constructor(props) {
+    super(props);
+    this.userRef = React.createRef();
+    this.passRef = React.createRef();
+  }
+  
+  shouldComponentUpdate() { return false }
+
+  render() {
+    return (
+      <form onSubmit={(e) => this.props.onSubmit(e, this.userRef.current.value, this.passRef.current.value)}>
+      <input type="text"
+            id="username"
+            key="username"
+            ref={this.userRef}
+            placeholder="Username" />
+
+      <input type="password"
+            id="password"
+            key="password"
+            ref={this.passRef}
+            placeholder="Password" />
+
+      <input type="submit"
+            value="Sign In" />
+    </form>
+    );
+  }
+} 

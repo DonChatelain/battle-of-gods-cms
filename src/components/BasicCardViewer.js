@@ -4,8 +4,8 @@ import styled from 'styled-components';
 import BasicCardClassTile from './BasicCardClassTile';
 
 export default class BasicCardViewer extends React.Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.colors = [
       'RED',
       'BLUE',
@@ -34,7 +34,7 @@ export default class BasicCardViewer extends React.Component {
       background: black;
 
       > section {
-        width: 100%;
+        /* width: 100%; */
 
       }
 

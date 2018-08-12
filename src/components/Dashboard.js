@@ -6,8 +6,8 @@ import { Link } from 'react-router-dom'
 import config from '../config';
 
 export default class Header extends React.Component {
-  // constructor() {
-  //   super();
+  // constructor(props) {
+  //   super(props);
   // }
 
   componentDidMount() {
