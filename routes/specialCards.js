@@ -4,10 +4,13 @@ const router = express.Router();
 const { SpecialCard } = require('../models');
 
 const DEFAULT_QUERY_LIMIT = 10;
+const DEFAULT_SORT_BY = 'owner';
+const DEFAULT_SORT_ORDER = 1;
 
 // GET
 router.get('/', (req, res) => {
   const q = {};
+  const sorter = {};
   if (req.query.name) q.name = req.query.name;
   if (req.query.owner) q.owner = req.query.owner;
   if (req.query.effect) q.effect = req.query.effect;
@@ -15,12 +18,15 @@ router.get('/', (req, res) => {
   if (req.query.instant) q.instant = req.query.instant;
   if (req.query.def) q.def = req.query.def;
   if (req.query.qty) q.qty = req.query.qty;
-  let limiter = parseInt(req.query.limit) || DEFAULT_QUERY_LIMIT;
+  const limiter = parseInt(req.query.limit) || DEFAULT_QUERY_LIMIT;
+  const sortBy = req.query.sortBy || DEFAULT_SORT_BY;
+  const sortOrder = req.query.sortOrder || DEFAULT_SORT_ORDER;
   const fields = req.query.fields || '';
-
+  sorter[sortBy] = sortOrder;
+  
   SpecialCard
     .find(q, fields.split(',').join(' '))
-    .sort({ owner: 1 })
+    .sort(sorter)
     .limit(limiter)
     .then(cards => res.json(cards));
 });
