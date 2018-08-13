@@ -10,7 +10,9 @@ This allows both the client and server code to be hosted in the same place (depl
 
 - [Mongoose](http://mongoosejs.com/) serves as an ODM to MongoDB- utlizing aggregation and model schemas
 
-- I use [styled components](https://github.com/styled-components/styled-components) in such a way that allows me to write all pertinant code to a component (JS, HTML, CSS) within the same class _while_ keeping my preferred order hierarchy- JavaScript at the top, with HTML below it (`render()`) and CSS at the bottom (`style()`). For example: 
+- I use [styled components](https://github.com/styled-components/styled-components) in such a way that allows me to write all pertinant code to a component (JS, HTML, CSS) within the same class _while_ keeping my preferred order hierarchy- JavaScript at the top, with HTML below it (`render()`) and CSS at the bottom (`style()`). Also the package allows the use of Sass without the need to setup a precompiler- just awesome.
+
+For example: 
 
 ```javascript
 import React from 'react';
