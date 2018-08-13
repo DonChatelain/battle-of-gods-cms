@@ -2,6 +2,9 @@ import React from 'react';
 import styled from 'styled-components';
 import { Link, withRouter } from 'react-router-dom'
 
+import menuIcon from '../static/menu.svg';
+import color from '../styles/color-variables';
+
 class Header extends React.Component {
   constructor(props) {
     super(props);
@@ -15,6 +18,7 @@ class Header extends React.Component {
     this.props.history.listen(location => this.onHistoryChange(location.pathname));
   };
 
+  // TODO: do this moar better
   onHistoryChange(pathname) {
     let title;
     switch(pathname) {
@@ -27,17 +31,8 @@ class Header extends React.Component {
     this.setState({ title })
   }
 
-  signOut() {
-    localStorage.removeItem('BOG_JWT');
-  }
-
   render() {
     const Wrapper = this.style();
-    const displaySignOutButton = () => {
-      if (this.props.history.location.pathname !== '/signin') {
-        return <Link className="sign-out-btn" onClick={this.signOut.bind(this)} to="/signin">Sign Out</Link>
-      }
-    }
 
     const displayHomeButton = () => {
       if (this.props.history.location.pathname !== '/signin') {
@@ -57,7 +52,7 @@ class Header extends React.Component {
       <Wrapper>
         {displayHomeButton()}
         <h1>{this.state.title}</h1>
-        {displaySignOutButton()}
+        <MenuButton location={this.props.history.location.pathname} />
       </Wrapper>
     );
   }
@@ -67,6 +62,7 @@ class Header extends React.Component {
     const headTopExtend = 165;
     const headSideExtend = 50;
     const headTextPaddingLeft = 50;
+
     return styled.header`
       z-index: 100;
       position: fixed;
@@ -117,14 +113,133 @@ class Header extends React.Component {
         filter: grayscale(0.7);
       }
 
-      .sign-out-btn {
-        right: ${headSideExtend * 1.5}px;
-        width: auto;
+      .menu-wrapper {
+        padding: 5px 15px;
+        position: absolute;
         left: auto;
-        color: white;
-        padding: 0 5px;
+        bottom: 0px;
+        right: 50px;
+        width: 20px;
+        height: 25px;
+        cursor: pointer;
+        background: rgba(255, 255, 255, 0);
+        transition: background-color 250ms ease;
+
+        &:hover {
+          background: rgba(255, 255, 255, 0.15);
+        }
+        
+        span {
+          height: 100%;
+          background-repeat: no-repeat;
+          background-size: cover;
+          display: block;
+        }
+
+        .menu-box {
+          background: rgba(255, 255, 255, 0.98);
+          position: absolute;
+          top: ${headHeight}px;
+          right: 0;
+          width: 100vw;
+          height: 100vh;
+          box-shadow: -3px 0px 4px 0px rgba(0,0,0, 0.1);
+          transition: right 500ms ease-in-out;
+          @media only screen and (min-width : 768px) {
+            width: 400px;
+          }
+
+          ul {
+            list-style: none;
+            user-select: none;
+
+            li {
+              opacity: 0.7;
+              border-bottom: 1px solid #bdbdbd;
+              padding: 20px;
+              background-color: transparent;
+              position: relative;
+
+              &:hover:before {
+                width: 10px;
+              }
+
+              &:before {
+                content: "";
+                width: 0;
+                height: 100%;
+                position: absolute;
+                top: 0;
+                left: 0;
+                background: ${color.blue};
+                transition: width 250ms ease;
+              }
+              
+              &:hover {
+                opacity: 1;
+              }
+
+            }
+          }
+        }
       }
     `;
+  }
+}
+
+class MenuButton extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      open: false,
+    };
+    this.busy = false;
+    this.options = [
+      {
+        title: 'Totally Useless Menu Item',
+        callback: () => {},
+      },
+      {
+        title: 'Just Filler...',
+        callback: () => {},
+      },
+      {
+        title: 'Sign Out',
+        callback: () => {
+          localStorage.removeItem('BOG_JWT');
+          window.location.href = '/signin';
+        }
+      },
+    ];
+  }
+
+  onClick(e) {
+    if (this.busy) return;
+    this.busy = true;
+    this.setState({ open: !this.state.open }, () => this.busy = false);
+  }
+
+  render() {
+    const displayMenu = () => {
+      if (this.state.open) {
+        return <div className="menu-box">
+          <ul>
+            {this.options.map((opt, i) => {
+              return <li key={i} onClick={() => opt.callback()}>{opt.title}</li>
+            })}
+          </ul>
+        </div>
+      }
+    }
+
+    if (this.props.location === '/signin') return ''
+
+    return (
+      <div onClick={this.onClick.bind(this)} className="menu-wrapper">
+        <span style={{ backgroundImage: `url(${menuIcon})` }}></span>
+        {displayMenu()}
+      </div>
+    )
   }
 }
 

@@ -23,3 +23,4 @@
 - Display team (name + faction symbol) ???
 - Display aggregate stats per character
 - Undo system (create alongside Trash bin system)
+- filter sp cards WITHOUT refreshing

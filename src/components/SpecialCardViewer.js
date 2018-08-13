@@ -84,37 +84,44 @@ export default class TeamViewer extends React.Component {
       <Wrapper>
         <Filter characters={this.state.characters}/>
         {this.displayLoader()}
-        {this.state.cards.map((card, i) => 
-          <SpecialCardTile
-            key={i}
-            card={card}
-            characters={this.state.characters}
-            index={i}
-            onChange={this.onChange.bind(this)}>
-          </SpecialCardTile>
-        )}
+        <div className="cards-wrapper">
+          {this.state.cards.map((card, i) => 
+            <SpecialCardTile
+              key={i}
+              card={card}
+              characters={this.state.characters}
+              index={i}
+              onChange={this.onChange.bind(this)}>
+            </SpecialCardTile>
+          )}
+        </div>
       </Wrapper>
     );
   }
 
   style() {
     return styled.main`
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: space-evenly;
       padding: 10px;
+      width: 100%;
 
-      > section {
+      .cards-wrapper {
         width: 100%;
-      }
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-evenly;
 
-      select {
-        width: calc(100% - 10px);
-      }
-
-      @media only screen and (min-width : 768px) {
         > section {
-          width: 40%;
+          width: 100%;
+        }
+  
+        select {
+          width: calc(100% - 10px);
+        }
+  
+        @media only screen and (min-width : 768px) {
+          > section {
+            width: 40%;
+          }
         }
       }
     `;
@@ -175,7 +182,7 @@ class Filter extends React.Component {
 
   render() {
     const Wrapper = this.style();
-    const sortOrder = this.sortOrder == -1 ? dscIcon : ascIcon;
+    const sortOrder = this.sortOrder == -1 ? dscIcon : ascIcon; // eslint-disable-line
 
     return (
       <Wrapper>
@@ -217,11 +224,12 @@ class Filter extends React.Component {
 
   style() {
     return styled.div`
-      width: 100%;
+      width: 300px;
       display: flex;
       justify-content: space-around;
       border-bottom: 1px solid #eaeaea;
-      padding-bottom: 20px;
+      padding-bottom: 15px;
+      margin-bottom: 15px;
 
       .sort-order {
         width: 30px;
@@ -242,8 +250,8 @@ class Filter extends React.Component {
 
         select.filter {
           border-radius: 0;
-          max-width: 160px;
-          min-width: 160px;
+          width: 100%;
+          min-width: 70px;
           -webkit-appearance: none;
           height: 30px;
           text-indent: 10px;
