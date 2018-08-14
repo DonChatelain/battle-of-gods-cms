@@ -8,6 +8,7 @@ const cors = require('cors');
 const passport = require('passport');
 
 const apiRoutes = require('./routes');
+const { SpecialCard } = require('./models');
 
 const MONGO_URI = process.env.BOG_DB_URI || '';
 const PORT = process.env.NODE_ENV === "production" ? 80 : 6660;

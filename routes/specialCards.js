@@ -11,6 +11,7 @@ const DEFAULT_SORT_ORDER = 1;
 router.get('/', (req, res) => {
   const q = {};
   const sorter = {};
+
   if (req.query.name) q.name = req.query.name;
   if (req.query.owner) q.owner = req.query.owner;
   if (req.query.effect) q.effect = req.query.effect;
@@ -18,17 +19,30 @@ router.get('/', (req, res) => {
   if (req.query.instant) q.instant = req.query.instant;
   if (req.query.def) q.def = req.query.def;
   if (req.query.qty) q.qty = req.query.qty;
+
   const limiter = parseInt(req.query.limit) || DEFAULT_QUERY_LIMIT;
+  const offset = parseInt(req.query.offset) || 0;
   const sortBy = req.query.sortBy || DEFAULT_SORT_BY;
   const sortOrder = req.query.sortOrder || DEFAULT_SORT_ORDER;
-  const fields = req.query.fields || '';
+  let fields = req.query.fields || { __v: 0, index: 0, key: 0 };
+
   sorter[sortBy] = sortOrder;
-  
-  SpecialCard
-    .find(q, fields.split(',').join(' '))
-    .sort(sorter)
-    .limit(limiter)
-    .then(cards => res.json(cards));
+
+  const pCount = SpecialCard.countDocuments(q);
+  const pFind = SpecialCard
+                  .find(q, fields)
+                  .sort(sorter)
+                  .skip(offset)
+                  .limit(limiter);
+
+  Promise.all([pCount, pFind]).then(pResult => {
+    const [ count, cards ] = pResult;
+    res.set({
+      'Access-Control-Expose-Headers': 'Total-Count',
+      'Total-Count': count,
+    });
+    res.json(cards);
+  })
 });
 
 router.get('/:name', (req, res) => {
@@ -57,6 +71,5 @@ router.delete('/:id', (req, res) => {
     .then(card => res.json(card))
     .catch(error => res.json({ error }));
 });
-
 
 module.exports = router;

@@ -7,8 +7,8 @@ export default class SpecialCardTile extends Tile {
     super(props);
     this.state = {
       isEditingName: false,
+      name: this.props.card.name,
     }
-    this.state = Object.assign(this.state, this.props.card);
     this.inputRef = null;
   }
 
@@ -38,12 +38,23 @@ export default class SpecialCardTile extends Tile {
     )
   }
 
+  deleteCard(id, name) {
+    const sure = confirm(`Are you sure you want to delete ${name}?`);
+    if (sure) {
+      const reallySure = confirm(`Are you REALLY sure you want to DELETE ${name}?`)
+      if (reallySure) {
+        const affirm = confirm(`Take a deep breath and really think hard about your life and the decisions being made. You are ABSO-FUCKING-LUTELY POSITIVE you want to delete ${name}????`)
+        if (affirm) this.props.deleteCard(id);
+      }
+    }
+  }
+
   render() {
-    const card = this.state;
+    const card = this.props.card;
     const i = this.props.index;
     return (
       <Tile>
-        <a className="anchor-target" name={card.name}>&nbsp;</a>
+        <a className="anchor-target" name={this.state.name}>&nbsp;</a>
         
         {this.displayName()}
 
@@ -102,6 +113,9 @@ export default class SpecialCardTile extends Tile {
 
             </textarea>
           </div>
+        </div>
+        <div className="row full">
+          <span onClick={() => this.deleteCard(card._id, this.state.name)} className="delete-card-btn">Delete</span>
         </div>
       </Tile>
     )

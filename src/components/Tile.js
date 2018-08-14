@@ -168,6 +168,13 @@ export default class Tile extends React.Component {
 
       select {
       }
+
+      .delete-card-btn {
+        color: ${color.red};
+        cursor: pointer;
+        padding-top: 5px;
+        text-align: right;
+      }
     `;
   }
 }
