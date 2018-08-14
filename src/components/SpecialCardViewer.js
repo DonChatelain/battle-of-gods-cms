@@ -4,8 +4,7 @@ import styled from 'styled-components';
 
 import config from '../config';
 import SpecialCardTile from './SpecialCardTile';
-import ascIcon from '../static/sort-asc.png';
-import dscIcon from '../static/sort-dsc.png';
+import SpecialCardFilter from './SpecialCardFilter';
 
 export default class TeamViewer extends React.Component {
   constructor(props) {
@@ -15,6 +14,7 @@ export default class TeamViewer extends React.Component {
       characters: [],
       requestActive: false,
     };
+    this.addingCard = false;
     this.allCardsPresent = false;
     this.totalCount = 0;
     this.requestOffset = 0;
@@ -41,10 +41,6 @@ export default class TeamViewer extends React.Component {
     if (state.cards && this.totalCount !== 0 && state.cards.length === this.totalCount) {
       this.allCardsPresent = true;
     }
-  }
-
-  componentWillUnmount() {
-    document.removeEventListener('scroll', this.onScroll);
   }
 
   fetchCards() {
@@ -85,6 +81,7 @@ export default class TeamViewer extends React.Component {
 
   componentWillUnmount() {
     this.cancelRequest();
+    document.removeEventListener('scroll', this.onScroll);
   }
 
   displayLoader() {
@@ -97,7 +94,6 @@ export default class TeamViewer extends React.Component {
 
   patchData(id, data) {
     this.cancelRequest();
-
     axios
       .patch(
         `${config.API_URL}/specialcards/${id}`,
@@ -111,7 +107,7 @@ export default class TeamViewer extends React.Component {
   fetchCharacterNames() {
     axios
       .get(config.API_URL + '/characters?fields=name')
-      .then(res => { return; this.setState({ characters: res.data })})
+      .then(res => { this.setState({ characters: res.data })})
       .catch(err => console.error(err));
   }
 
@@ -124,6 +120,33 @@ export default class TeamViewer extends React.Component {
     this.patchData(card._id, newState);
   }
 
+  addCard() {
+    if (this.addingCard) return;
+    this.addingCard = true;
+
+    const cardData = {
+      name: 'Untitled',
+      owner: '',
+      effect: '',
+      atk: 0,
+      def: 0,
+      qty: 0
+    }
+    this.postCard(cardData)
+  }
+
+  postCard(card) {
+    if (!card) return;
+    axios
+      .post(config.API_URL + '/specialcards', card)
+      .then(res => {
+        const cards = Array.from(this.state.cards);
+        cards.unshift(res.data);
+        this.setState({ cards }, () => this.addingCard = false);
+      })
+      .catch(err => console.error(err));
+  }
+
   deleteCard(id) {
     let index;
     const card = this.state.cards.find((c, i) => {
@@ -134,9 +157,8 @@ export default class TeamViewer extends React.Component {
     axios
       .delete(config.API_URL + '/specialcards/' + id)
       .then((res) => {
-        console.log(res);
         const cards = Array.from(this.state.cards);
-        const out = cards.splice(index, 1);
+        cards.splice(index, 1);
         this.setState({ cards })
       })
       .catch(err => console.error(err));
@@ -146,7 +168,11 @@ export default class TeamViewer extends React.Component {
     const Wrapper = this.style();
     return (
       <Wrapper>
-        <Filter characters={this.state.characters}/>
+
+        <SpecialCardFilter
+          characters={this.state.characters}
+          addCard={this.addCard.bind(this)}
+        />
         
         <div className="cards-wrapper">
           {this.state.cards.map((card, i) => 
@@ -156,8 +182,8 @@ export default class TeamViewer extends React.Component {
               characters={this.state.characters}
               index={i}
               onChange={this.onChange.bind(this)}
-              deleteCard={this.deleteCard.bind(this)} >
-            </SpecialCardTile>
+              deleteCard={this.deleteCard.bind(this)}
+            />
           )}
         </div>
         <div className="bottom-filler">
@@ -195,140 +221,6 @@ export default class TeamViewer extends React.Component {
           > section {
             width: 40%;
           }
-        }
-      }
-    `;
-  }
-}
-
-// = = = = = = = = == = = = = = == = = = = = == = = = = = = = = = = = = == = = = = = == == =
-
-class Filter extends React.Component {
-  constructor(props) {
-    super(props);
-    this.charFilter = new URL(window.location.href).searchParams.get('owner');
-    this.sortBy = new URL(window.location.href).searchParams.get('sortBy');
-    this.sortOrder = new URL(window.location.href).searchParams.get('sortOrder');
-    if (this.sortOrder == null) this.sortOrder = 1;
-    this.sortables = [
-      {
-        id: 'owner',
-        label: 'Owner'
-      },
-      {
-        id: 'qty',
-        label: 'Quantity'
-      },
-      {
-        id: 'atk',
-        label: 'Attack'
-      },
-      {
-        id: 'def',
-        label: 'Defense'
-      }
-    ]
-  }
-
-  onFilterChange(char) {
-    const url = new URL(window.location.href);
-    if (char === 'none') {
-      url.searchParams.delete('owner');
-    } else {
-      url.searchParams.set('owner', char);
-    }
-    window.location.href = url;
-  }
-
-  onSortByChange(field) {
-    const url = new URL(window.location.href);
-    url.searchParams.set('sortBy', field);
-    window.location.href = url;
-  }
-
-  onSortOrderChange() {
-    const order = this.sortOrder * -1;
-    const url = new URL(window.location.href);
-    url.searchParams.set('sortOrder', order);
-    window.location.href = url; 
-  }
-
-  render() {
-    const Wrapper = this.style();
-    const sortOrder = this.sortOrder == -1 ? dscIcon : ascIcon; // eslint-disable-line
-
-    return (
-      <Wrapper>
-        <div>
-          <span>Filter By Character</span>
-          <select className="filter"
-                  defaultValue={this.charFilter} 
-                  onChange={(event) => this.onFilterChange(event.target.value)}>
-            <option key="-1" value="none">None</option>
-            {this.props.characters.map((char, i) => {
-              return <option key={'char_' + i} value={char.name}>{char.name}</option>
-            })}
-          </select>
-        </div>
-
-        <div>
-          <span>Sort By</span>
-          <select className="filter"
-                  defaultValue={this.sortBy}
-                  onChange={(event) => this.onSortByChange(event.target.value)}>
-            {
-              this.sortables.map((x, i) => {
-                return <option key={i} value={x.id}>{x.label}</option>
-              })
-            }
-          </select>
-        </div>
-
-        <div>
-          <span>Order</span>
-          <div style={{ backgroundImage: `url(${sortOrder})` }}
-               className="sort-order"
-               onClick={this.onSortOrderChange.bind(this)}>
-          </div>
-        </div>
-      </Wrapper>
-    )
-  }
-
-  style() {
-    return styled.div`
-      width: 300px;
-      display: flex;
-      justify-content: space-around;
-      border-bottom: 1px solid #eaeaea;
-      padding-bottom: 15px;
-      margin-bottom: 15px;
-
-      .sort-order {
-        width: 30px;
-        height: 30px;
-        background-size: contain;
-        background-repeat: no-repeat;
-        cursor: pointer;
-      }
-
-      div {
-        /* width: 300px; */
-
-        span {
-          opacity: 0.5;
-          font-size: 0.8em;
-          display: block;
-        }
-
-        select.filter {
-          border-radius: 0;
-          width: 100%;
-          min-width: 70px;
-          -webkit-appearance: none;
-          height: 30px;
-          text-indent: 10px;
-          cursor: pointer;
         }
       }
     `;
