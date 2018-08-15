@@ -4,12 +4,9 @@
 - Figure out way to change special card defense value to Fully Block
 - Lightbox to view character images (reusable for special cards)
 - Client side patch support for Basic card classes
-- fill out instant damage for all sp cards :[
 
 ### MEDIUM
 - BIGGY: For accurate stat aggregation, figure out how to account for full block counters, and instant damage....???
-- Redo "Home" button
-- Proper Signout button logic (component probably)
 - Sp card image support
 - Set up automatic export and backup of database (daily?)
 - Tighten up Model schemas with basic validation
@@ -22,4 +19,5 @@
 - Undo system (create alongside Trash bin system)
 - filter sp cards WITHOUT refreshing
 - Axios is possibly freezing UI on sp card requests (all requests?) investigate, possibly replace, possibly just use pagination for performance sake (mongoose-paginate)
-
+- Proper Signout button logic (component probably)
+- Redo "Home" button

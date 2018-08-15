@@ -115,7 +115,9 @@ export default class SpecialCardTile extends Tile {
           </div>
         </div>
         <div className="row full">
-          <span onClick={() => this.deleteCard(card._id, this.state.name)} className="delete-card-btn">Delete</span>
+          <div className="delete-card-btn">
+            <span onClick={() => this.deleteCard(card._id, this.state.name)}>Delete</span>
+          </div>
         </div>
       </Tile>
     )

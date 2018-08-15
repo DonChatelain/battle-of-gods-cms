@@ -165,20 +165,26 @@ export default class Tile extends React.Component {
         max-width: 70% !important;
         margin: 0 auto;
         color: ${color.blue};
-        /* align-self: center; */
         display: flex;
         align-items: center;
         justify-content: center;
+        opacity: 0.8;
+        &:hover {
+          opacity: 1;
+        }
       }
 
       select {
       }
 
       .delete-card-btn {
-        color: ${color.red};
-        cursor: pointer;
         padding-top: 5px;
-        text-align: right;
+
+        span {
+          margin-left: auto;
+          cursor: pointer;
+          color: ${color.red};
+        }
       }
 
       .sp-card-count {

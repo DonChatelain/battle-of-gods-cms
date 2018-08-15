@@ -35,12 +35,6 @@ router.get('/', (req, res) => {
   Promise.all(promises)
   .then(aResults => {
     const [ spCounts, characters ] = aResults;
-    if (!Array.isArray(spCounts) || !Array.isArray(characters)) {
-      console.error('Either spCounts or characters are not array : GET /characters');
-    }
-    if (spCounts.length !== characters.length) {
-      console.error('spCounts has different length from characters[] : GET /characters')
-    }
 
     for (let char of characters) {
       for ({ _id, spCount } of spCounts) {
@@ -62,6 +56,7 @@ router.get('/', (req, res) => {
 router.get('/names', (req, res) => {
   Character
     .find({}, { name: 1 })
+    .sort({ team: 1, index: 1 })
     .then(chars => res.json( chars ))
     .catch(error => res.status(500).json({ error }));
 });

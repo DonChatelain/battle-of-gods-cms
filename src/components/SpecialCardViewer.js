@@ -214,7 +214,7 @@ export default class TeamViewer extends React.Component {
         }
   
         select {
-          width: calc(100% - 10px);
+          /* width:/ calc(100% - 10px); */
         }
   
         @media only screen and (min-width : 768px) {
