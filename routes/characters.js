@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 
-const { Character } = require('../models');
+const { Character, SpecialCard } = require('../models');
 
 const DEFAULT_QUERY_LIMIT = 25;
 
@@ -13,19 +13,76 @@ router.get('/', (req, res) => {
   if (req.query.team) q.team = req.query.team;
   if (req.query.health) q.health = req.query.health;
   let limiter = parseInt(req.query.limit) || DEFAULT_QUERY_LIMIT;
-  const fields = req.query.fields || '';
+  const fields = req.query.fields ? req.query.fields.split(',').join(' ') : { __v: 0 }; // don't worry, this works
 
+
+  const promises = [];
+  promises.push(
+    SpecialCard.aggregate([{
+      $group: {
+        _id: '$owner',
+        spCount: { $sum: '$qty' }
+      }
+    }])
+  );
+  promises.push(
+    Character
+      .find(q, fields)
+      .sort({ team: 1, name: 1 })
+      .limit(limiter)
+      .lean()
+  );
+  Promise.all(promises)
+  .then(aResults => {
+    const [ spCounts, characters ] = aResults;
+    if (!Array.isArray(spCounts) || !Array.isArray(characters)) {
+      console.error('Either spCounts or characters are not array : GET /characters');
+    }
+    if (spCounts.length !== characters.length) {
+      console.error('spCounts has different length from characters[] : GET /characters')
+    }
+
+    for (let char of characters) {
+      for ({ _id, spCount } of spCounts) {
+        if (char.name === _id) {
+          char.spCount = spCount;
+          break;
+        }
+      }
+    }
+    res.json(characters);
+  })
+  .catch(error => {
+    console.error(error);
+    res.status(500).json({ error });
+  });
+
+});
+
+router.get('/names', (req, res) => {
   Character
-    .find(q, fields.split(',').join(' '))
-    .sort({ team: 1, name: 1 })
-    .limit(limiter)
-    .then(chars => res.json(chars))
-    .catch(err => console.error(err));
+    .find({}, { name: 1 })
+    .then(chars => res.json( chars ))
+    .catch(error => res.status(500).json({ error }));
 });
-router.get('/:name', (req, res) => {
-  const name = req.params.name;
-  Character.findOne({ name }).then(char => res.json(char));
+
+// GET single detailed character... perhaps unnecessary ? 
+router.get('/:id', (req, res) => {
+  // const _id = req.params.id;
+
+  // Character.findOne({ _id })
+  //   .then(char => {
+  //     const promises = [];
+  //     promises.push(SpecialCard.find({ owner: char.name }))
+  //     promises.push(SpecialCard.countDocuments({ owner: char.name }));
+  //     Promise.all(promises).then 
+  //   });
+
+  res.json({ hello: 'Oh hai' });
+
 });
+
+// GET stats 
 
 // PATCH
 router.patch('/:id', (req, res) => {

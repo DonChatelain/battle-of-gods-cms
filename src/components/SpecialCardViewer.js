@@ -106,7 +106,7 @@ export default class TeamViewer extends React.Component {
 
   fetchCharacterNames() {
     axios
-      .get(config.API_URL + '/characters?fields=name')
+      .get(config.API_URL + '/characters/names')
       .then(res => { this.setState({ characters: res.data })})
       .catch(err => console.error(err));
   }

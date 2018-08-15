@@ -2,6 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 
 import Tile from './Tile';
+import cardsIcon from '../static/cards.png';
 
 export default class CharacterTile extends Tile {
   constructor(props) {
@@ -43,6 +44,7 @@ export default class CharacterTile extends Tile {
     if (this.state.minorCount != null) {
       return (
           <input type="number"
+                 title="Minor Character Count"
                  className="major-minor"
                  defaultValue={this.state.minorCount}
                  onBlur={(event) => this.props.onBlur(event.target.value, this.state._id, 'minorCount')} />
@@ -99,9 +101,13 @@ export default class CharacterTile extends Tile {
                     onBlur={(event) => this.props.onBlur(event.target.value, id, 'description')}>
           </textarea>
         </div>
-        <div className="row full">
+        <div className="row half">
+          <div className="sp-card-count" title="Special Card Count">
+            <div style={{backgroundImage: `url(${cardsIcon})`}}></div>
+            <span>{char.spCount || 0}</span>
+          </div>
           <Link to={`/specialcards?owner=${char.name}`}>
-            View Special Cards
+            View Sp. Cards
           </Link>
         </div>
       </Tile>

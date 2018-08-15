@@ -135,6 +135,8 @@ export default class SpecialCardFilter extends React.Component {
           height: 30px;
           text-indent: 10px;
           cursor: pointer;
+          border-bottom: 2px solid #000;
+          font-weight: bold;
         }
       }
     `;

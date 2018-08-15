@@ -40,6 +40,7 @@ export default class Tile extends React.Component {
       .row {
         display: flex;
         flex-wrap: nowrap;
+        align-items: center;
         justify-content: space-between;
         
         &.full {
@@ -75,7 +76,7 @@ export default class Tile extends React.Component {
       }
 
       .major-minor {
-        opacity: 0.3;
+        opacity: 0.5;
         font-style: italic;
         display: flex;
         align-items: center;
@@ -164,6 +165,10 @@ export default class Tile extends React.Component {
         max-width: 70% !important;
         margin: 0 auto;
         color: ${color.blue};
+        /* align-self: center; */
+        display: flex;
+        align-items: center;
+        justify-content: center;
       }
 
       select {
@@ -174,6 +179,31 @@ export default class Tile extends React.Component {
         cursor: pointer;
         padding-top: 5px;
         text-align: right;
+      }
+
+      .sp-card-count {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        > * {
+          max-width: none !important;
+          min-width: auto !important;
+          padding: 0 2px;
+        }
+
+        div {
+          width: 20px;
+          height: 20px;
+          background-size: contain;
+          background-repeat: no-repeat;
+          filter: grayscale(1);
+        }
+
+        span {
+          font-size: 0.8em;
+          opacity: 0.6;
+        }
       }
     `;
   }

@@ -1,11 +1,10 @@
 # TODO
 
 ### HIGH!
-- Lightbox to view character images (reusable for special cards)
 - Figure out way to change special card defense value to Fully Block
+- Lightbox to view character images (reusable for special cards)
 - Client side patch support for Basic card classes
 - fill out instant damage for all sp cards :[
-- ADD sp card form
 
 ### MEDIUM
 - BIGGY: For accurate stat aggregation, figure out how to account for full block counters, and instant damage....???
@@ -22,5 +21,5 @@
 - Display aggregate stats per character
 - Undo system (create alongside Trash bin system)
 - filter sp cards WITHOUT refreshing
-- Axios is possibly freezing UI on sp card requests (all requests?) investigate, possibly replace, possibly just use pagination for performance sake
+- Axios is possibly freezing UI on sp card requests (all requests?) investigate, possibly replace, possibly just use pagination for performance sake (mongoose-paginate)
 
