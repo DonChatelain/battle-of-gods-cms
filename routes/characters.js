@@ -28,7 +28,7 @@ router.get('/', (req, res) => {
   promises.push(
     Character
       .find(q, fields)
-      .sort({ team: 1, name: 1 })
+      .sort({ team: 1, index: 1 })
       .limit(limiter)
       .lean()
   );

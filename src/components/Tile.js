@@ -73,6 +73,13 @@ export default class Tile extends React.Component {
             width: calc(33.33% - ${sectionPadding} / 2);
           }
         }
+        &.fourth {
+          * {
+          }
+          > * {
+            width: calc(25% - ${sectionPadding} / 2);
+          }
+        }
       }
 
       .major-minor {

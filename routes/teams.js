@@ -48,7 +48,7 @@ router.get('/', (req, res) => {
       $group: {
         _id: '$team',
         chars: { $push: '$name' },
-        totalHealth: { $sum: '$health' }
+        totalHealth: { $sum: { $cond: [{$gt: ['$minorCount', null]}, {$multiply: ['$health', '$minorCount']}, '$health'] }}
       }
     }])
     .then(data => resolve(data))

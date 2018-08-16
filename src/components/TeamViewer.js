@@ -5,6 +5,7 @@ import styled from 'styled-components';
 import config from '../config';
 import Tile from './Tile';
 import heartPng from '../static/heart.png';
+import cardPng from '../static/cards.png';
 import attackPng from '../static/attack.png';
 import defensePng from '../static/defense.png';
 
@@ -112,8 +113,9 @@ export default class TeamViewer extends React.Component {
         {this.state.teams.map((team, i) => 
           <Tile data={team} key={i}>
             {this.displayName(team.name, team.key, i)}
-            <div className="row third stats">
+            <div className="row fourth stats">
               <span className="health">{this.getTeamByKey(team.key).health}</span>
+              <span className="sp-count">{this.getTeamByKey(team.key).spQty}</span>
               <span className="attack">{this.getTeamByKey(team.key).totalAtk}</span>
               <span className="defense">{this.getTeamByKey(team.key).totalDef}</span>
             </div>
@@ -168,7 +170,7 @@ export default class TeamViewer extends React.Component {
           height: 50px;
           position: relative;
           content: '';
-          width: 35px;
+          width: 25px;
           height: 25px;
           position: relative;
           top: 0;
@@ -181,6 +183,9 @@ export default class TeamViewer extends React.Component {
 
         .health::before {
           background-image: url(${heartPng});
+        }
+        .sp-count::before {
+          background-image: url(${cardPng});
         }
         .attack::before {
           background-image: url(${attackPng});
