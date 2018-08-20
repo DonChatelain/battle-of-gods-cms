@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 
-const { Team, SpecialCard, Character } = require('../models');
+const { Team, SpecialCard, Character, BasicCardClass } = require('../models');
 
 // GET
 router.get('/', (req, res, next) => {
@@ -14,6 +14,80 @@ router.get('/', (req, res, next) => {
     .sort({ key: 1 })
     .then(teams => res.json(teams));
 });
+
+router.get('/alldata', (req, res) => {
+  // TODO: TESTS
+  const promises = [];
+
+  // teams find
+  promises.push(
+    Team.find({}, {
+      _id: 0, __v: 0
+    })
+    .lean()
+  );
+  // characters by _id: team
+  promises.push(
+    Character.aggregate([{
+      $group: {
+        _id: '$team',
+        chars: { $push: {
+          name: '$name',
+          health: '$health',
+          minorCount: '$minorCount',
+          image: '$image'
+        }},
+      },
+    }])
+  );
+  // sp cards by character
+  promises.push(
+    SpecialCard.aggregate([{
+      $group: {
+        _id: '$owner',
+        cards: { $push: {
+          name: '$name',
+          owner: '$owner',
+          effect: '$effect',
+          atk: '$atk',
+          def: '$def',
+          qty: '$qty',
+        }}
+      }
+    }])
+  );
+  // basic cards find
+  promises.push(
+    BasicCardClass.find({}, {
+      _id: 0, __v: 0, 'cards._id': 0
+    })
+  )
+
+  Promise.all(promises).then(pRes => {
+    const [ teams, charsByTeam, spCardsByChar, bsCards ] = pRes;
+    let allData = {};
+
+    allData = teams.reduce((acc, t) => {
+      const team = {};
+      team[t.key] = t;
+      // characters
+      const foundChars = charsByTeam.find(c => c._id === t.key)
+      team[t.key].characters = foundChars.chars || [];
+      // sp cards
+      team[t.key].cards = [];
+      const foundSpCards = spCardsByChar.filter(x => foundChars.chars.map(c => c.name).indexOf(x._id) !== -1)
+      foundSpCards.forEach(fsc => team[t.key].cards.push(...fsc.cards));
+      // bs cards
+      const foundBsCards = bsCards.find(x => x.colorClass === t.deckClass);
+      foundBsCards.cards.forEach(c => team[t.key].cards.push(c));
+      return acc = Object.assign(acc, team);
+    }, {});
+    // phew...
+    res.json(allData);
+  })
+  .catch(error => res.status(500).json({ error }));
+});
+
 router.get('/:key', (req, res) => {
   const query = { key: req.params.key };
   Team.findOne(query).then(team => res.json(team));
