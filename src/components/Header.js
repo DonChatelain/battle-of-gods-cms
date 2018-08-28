@@ -196,14 +196,6 @@ class MenuButton extends React.Component {
     this.busy = false;
     this.options = [
       {
-        title: 'Totally Useless Menu Item',
-        callback: () => {},
-      },
-      {
-        title: 'Just Filler...',
-        callback: () => {},
-      },
-      {
         title: 'Sign Out',
         callback: () => {
           localStorage.removeItem('BOG_JWT');

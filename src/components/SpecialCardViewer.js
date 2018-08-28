@@ -101,7 +101,10 @@ export default class TeamViewer extends React.Component {
         { cancelToken: new axios.CancelToken(executor => this.cancelRequest = executor) },
       )
       .then(res => console.log(res.data))
-      .catch(err => console.error(err));
+      .catch(err => {
+        if (err.response && err.response.status === 403) console.log('Nice try, but your credentials have READ-only access');
+        console.error(err);
+      });
   }
 
   fetchCharacterNames() {
@@ -144,7 +147,10 @@ export default class TeamViewer extends React.Component {
         cards.unshift(res.data);
         this.setState({ cards }, () => this.addingCard = false);
       })
-      .catch(err => console.error(err));
+      .catch(err => {
+        if (err.response && err.response.status === 403) console.log('Nice try, but your credentials have READ-only access');
+        console.error(err);
+      });
   }
 
   deleteCard(id) {
@@ -161,7 +167,10 @@ export default class TeamViewer extends React.Component {
         cards.splice(index, 1);
         this.setState({ cards })
       })
-      .catch(err => console.error(err));
+      .catch(err => {
+        if (err.response && err.response.status === 403) console.log('Nice try, but your credentials have READ-only access');
+        console.error(err);
+      });
   }
 
   render() {

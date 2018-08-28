@@ -5,19 +5,19 @@ const jwt = require('jwt-simple');
 const { User } = require('../models');
 const secret = process.env.BOG_AUTH_SECRET;
 
-router.post('/signup', (req, res) => {
-  if (!req.body.name || !req.body.password) {
-    return res.json({ success: false, msg: 'no user name and or password in request'});
-  }
-  const user = new User({
-    name: req.body.name,
-    password: req.body.password,
-  })
-  user.save(err => {
-    if (err) return res.json({ success: false, msg: 'failed to save user ' + err });
-    res.json({ success: true, msg: 'User added; Great job, you!' })
-  })
-});
+// router.post('/signup', (req, res) => {
+//   if (!req.body.name || !req.body.password) {
+//     return res.json({ success: false, msg: 'no user name and or password in request'});
+//   }
+//   const user = new User({
+//     name: req.body.name,
+//     password: req.body.password,
+//   })
+//   user.save(err => {
+//     if (err) return res.json({ success: false, msg: 'failed to save user ' + err });
+//     res.json({ success: true, msg: 'User added; Great job, you!' })
+//   })
+// });
 
 router.post('/signin', (req, res) => {
   User

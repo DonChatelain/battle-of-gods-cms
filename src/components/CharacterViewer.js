@@ -78,7 +78,10 @@ export default class CharacterViewer extends React.Component {
     axios
       .patch(`${config.API_URL}/characters/${id}`, data)
       .then(res => console.log(res.data))
-      .catch(err => console.error(err));
+      .catch(err => {
+        if (err.response && err.response.status === 403) console.log('Nice try, but your credentials have READ-only access');
+        console.error(err);
+      });
   }
 
   shouldComponentUpdate(nextProps, nextState) {

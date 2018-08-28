@@ -11,6 +11,10 @@ const UserSchema = new Schema({
   password: {
     type: String,
     required: true,
+  },
+  admin: {
+    type: Number,
+    required: false,
   }
 });
 
@@ -34,6 +38,10 @@ UserSchema.methods.comparePassword = function (pass, done) {
     if (err) return done(err);
     done(null, isMatch);
   })
+}
+
+UserSchema.methods.getIsAdmin = function () {
+  return this.admin === 1;
 }
 
 module.exports = UserSchema;
